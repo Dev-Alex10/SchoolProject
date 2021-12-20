@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SchoolProject</string>
+    <string name="sign_in">Iniciar Sessão</string>
+    <string name="sign_up">Registar</string>
+    <string name="email">Email</string>
+    <string name="password">Palavra-chave</string>
+    <string name="error">Erro</string>
+</resources>
