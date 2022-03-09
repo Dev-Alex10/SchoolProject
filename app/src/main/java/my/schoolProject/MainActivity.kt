@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import my.schoolProject.databinding.ActivityMainBinding
+import my.schoolProject.student.data.StudentModel
 
 open class MainActivity : AppCompatActivity() {
 
@@ -22,11 +23,10 @@ open class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         binding.btnSignIn.setOnClickListener {
-            if (binding.usernameEditText.text != null || binding.passwordEditText.text != null) {
+            if (binding.emailEditText.text != null || binding.passwordEditText.text != null) {
                 signIn(
-                    binding.usernameEditText.text.toString(),
+                    binding.emailEditText.text.toString(),
                     binding.passwordEditText.text.toString()
                 )
             }

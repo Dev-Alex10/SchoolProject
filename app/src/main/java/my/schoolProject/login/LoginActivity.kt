@@ -9,11 +9,15 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import my.schoolProject.MainActivity
+import my.schoolProject.SchoolProjectApplication
 import my.schoolProject.databinding.ActivityLoginBinding
+import my.schoolProject.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel by viewModels<LoginViewModel> {
+        LoginViewModelFactory((application as SchoolProjectApplication).repository)
+    }
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +32,13 @@ class LoginActivity : AppCompatActivity() {
         binding.btnSignIn.setOnClickListener {
             validateAndRedirect()
         }
+        binding.btnSignUp.setOnClickListener {
+            val email = binding.emailEditText.text.toString()
+            val intent = Intent(this, RegisterActivity::class.java)
+            intent.putExtra("email", email)
+            startActivity(intent)
+            finish()
+        }
         binding.passwordEditText.setOnEditorActionListener { _, actionID, keyEvent ->
             if (keyEvent != null && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER
                 || actionID == EditorInfo.IME_ACTION_DONE
@@ -37,13 +48,11 @@ class LoginActivity : AppCompatActivity() {
             false
         }
 
-        viewModel.loginResultLiveData.observe(this){loginResult:Boolean ->
-            if (!loginResult){
+        viewModel.loginResultLiveData.observe(this) { loginResult: Boolean ->
+            if (!loginResult) {
                 binding.errorTv.visibility = View.VISIBLE
-            }else{
-                val username = binding.emailEditText.text.toString()
-                val intent = Intent(this,MainActivity::class.java)
-                intent.putExtra("username", username)
+            } else {
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }
@@ -51,9 +60,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validateAndRedirect() {
-        val username = binding.emailEditText.text.toString()
-        if (username.isEmpty()) {
-            Toast.makeText(this, "Username empty", Toast.LENGTH_SHORT).show()
+        val email = binding.emailEditText.text.toString()
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Email empty", Toast.LENGTH_SHORT).show()
             return
         }
         val password = binding.passwordEditText.text.toString()
@@ -61,5 +70,6 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Password Empty", Toast.LENGTH_SHORT).show()
             return
         }
+        viewModel.areCredentialsValid(email, password)
     }
 }

@@ -1,4 +1,4 @@
-package my.schoolProject.User.data
+package my.schoolProject.user.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
