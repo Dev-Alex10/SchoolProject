@@ -7,4 +7,10 @@
     <string name="username" translatable="false">Username</string>
     <string name="error">Error</string>
     <string name="name">Name</string>
+    <string name="generic_error">Something wrong happened. Please try again.</string>
+    <string name="email_error">Please insert a valid email.</string>
+
+    <!-- SignUpScreen -->
+    <string name="create_account">Create account</string>
+    <string name="password_error">Your password should have at least six digits and include one digit, one lower case letter and one upper case letter.</string>
 </resources>

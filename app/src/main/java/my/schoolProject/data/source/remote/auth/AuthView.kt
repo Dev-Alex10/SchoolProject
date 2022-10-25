@@ -1,48 +1,26 @@
-package my.schoolProject
-
+package my.schoolProject.data.source.remote.auth
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import dagger.hilt.android.AndroidEntryPoint
-import my.schoolProject.databinding.ActivityMainBinding
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent{
+import my.schoolProject.MainActivity
 
-        }
-    }
-}
-   /* private lateinit var auth: FirebaseAuth
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        binding.btnSignIn.setOnClickListener {
-            if (binding.emailEditText.text != null || binding.passwordEditText.text != null) {
-                signIn(
-                    binding.emailEditText.text.toString(),
-                    binding.passwordEditText.text.toString()
-                )
-            }
-        }
+class AuthView : MainActivity() {
+    private lateinit var auth: FirebaseAuth
+    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onCreate(savedInstanceState, persistentState)
+        // Initialize Firebase Auth
+        auth = Firebase.auth
     }
 
     public override fun onStart() {
         super.onStart()
-        // Initialize Firebase Auth
-        auth = Firebase.auth
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if (currentUser != null) {
@@ -50,7 +28,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun signUp(email: String, password: String) {
+     fun signUp(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -62,15 +40,14 @@ class MainActivity : ComponentActivity() {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
-                        baseContext, "Create account failed.",
+                        baseContext, "Authentication failed.",
                         Toast.LENGTH_SHORT
                     ).show()
                     updateUI(null)
                 }
             }
     }
-
-    private fun signIn(email: String, password: String) {
+    fun signIn(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -81,10 +58,8 @@ class MainActivity : ComponentActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext, "Authentication failed. ${task.exception}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
             }
@@ -101,5 +76,6 @@ class MainActivity : ComponentActivity() {
     companion object {
         private const val TAG = "AuthView"
     }
+
 }
-*/
+

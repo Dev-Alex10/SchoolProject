@@ -7,4 +7,9 @@
     <string name="password">Palavra-chave</string>
     <string name="error">Erro</string>
     <string name="name">Nome</string>
+    <string name="generic_error">Algo de errado aconteceu. Por favor tente novamente</string>
+    <string name="email_error">Inserir email válido</string>
+    <!-- SignUpScreen -->
+    <string name="create_account">Criar Conta</string>
+    <string name="password_error">A sua password deve conter pelo menos 6 dígitos, sendo uma maiúscula e outra minúscula.</string>
 </resources>
