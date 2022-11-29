@@ -1,12 +1,27 @@
 package my.schoolProject
 
 import android.app.Application
-import my.schoolProject.user.data.AppDatabase
-import my.schoolProject.user.data.UserRepository
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.HiltAndroidApp
+import my.schoolProject.ui.theme.SchoolTheme
+import javax.inject.Inject
 
-class SchoolProjectApplication : Application() {
+@HiltAndroidApp
+class SchoolProjectApplication @Inject constructor() : Application()
 
-    val database by lazy { AppDatabase.getDatabase(this) }
-
-    val repository by lazy { UserRepository(database.userDao()) }
+@Composable
+fun SchoolApp() {
+    SchoolTheme {
+        val navController = rememberNavController()
+        Scaffold {
+            SchoolNavHost(navController = navController, modifier = Modifier.padding(it))
+        }
+    }
 }
