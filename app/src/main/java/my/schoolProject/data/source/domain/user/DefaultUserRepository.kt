@@ -14,7 +14,12 @@ class DefaultUserRepository @Inject constructor(private val usersLocalSource: Us
         return usersLocalSource.getUser(email)
     }
 
-    override fun insertUser(user: User) {
+    override suspend fun insertUser(user: User) {
         usersLocalSource.insert(user)
     }
+
+    override fun deleteAllUsers() {
+        usersLocalSource.deleteAll()
+    }
+
 }

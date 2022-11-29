@@ -12,8 +12,8 @@ interface UserDao {
     @Query("SELECT * FROM User WHERE email = :email")
     fun getUser(email: String): UserEntity
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(user: UserEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(user: UserEntity)
 
 
     @Query("DELETE FROM User")

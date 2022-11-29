@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package my.schoolProject.data.source.remote
+package my.schoolProject.data.source.remote.accountService
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -33,7 +33,7 @@ class AccountServiceImpl @Inject constructor() : AccountService {
         return Firebase.auth.currentUser?.uid.orEmpty()
     }
 
-    override fun authenticate(email: String, password: String, onResult: (Throwable?) -> Unit) {
+    override fun signIn(email: String, password: String, onResult: (Throwable?) -> Unit) {
         Firebase.auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { onResult(it.exception) }
     }

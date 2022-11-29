@@ -8,15 +8,14 @@
         android:name=".SchoolProjectApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SchoolProject">
-        <activity android:name=".data.source.remote.login.LoginActivity"
+        android:theme="@style/Theme.SchoolProject"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".data.source.remote.register.RegisterActivity"/>
     </application>
 </manifest>

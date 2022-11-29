@@ -14,16 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package my.schoolProject.data.source.remote
+package my.schoolProject.di
 
-interface AccountService {
-    fun hasUser(): Boolean
-    fun isAnonymousUser(): Boolean
-    fun getUserId(): String
-    fun authenticate(email: String, password: String, onResult: (Throwable?) -> Unit)
-    fun sendRecoveryEmail(email: String, onResult: (Throwable?) -> Unit)
-    fun createAnonymousAccount(onResult: (Throwable?) -> Unit)
-    fun createAccount(email: String, password: String, onResult: (Throwable?) -> Unit)
-    fun deleteAccount(onResult: (Throwable?) -> Unit)
-    fun signOut()
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
+import my.schoolProject.data.source.remote.accountService.AccountService
+import my.schoolProject.data.source.remote.accountService.AccountServiceImpl
+
+@Module
+@InstallIn(ViewModelComponent::class)
+abstract class ServiceModule {
+    @Binds
+    abstract fun provideAccountService(impl: AccountServiceImpl): AccountService
 }

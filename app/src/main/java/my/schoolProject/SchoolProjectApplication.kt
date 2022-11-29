@@ -1,12 +1,15 @@
 package my.schoolProject
 
 import android.app.Application
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.BottomNavigation
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.HiltAndroidApp
-import my.schoolProject.data.source.local.AppDatabase
-import my.schoolProject.data.source.domain.user.DefaultUserRepository
 import my.schoolProject.ui.theme.SchoolTheme
 import javax.inject.Inject
 
@@ -14,11 +17,11 @@ import javax.inject.Inject
 class SchoolProjectApplication @Inject constructor() : Application()
 
 @Composable
-fun SchoolApp(){
+fun SchoolApp() {
     SchoolTheme {
         val navController = rememberNavController()
         Scaffold {
-            //TODO do navHost
+            SchoolNavHost(navController = navController, modifier = Modifier.padding(it))
         }
     }
 }

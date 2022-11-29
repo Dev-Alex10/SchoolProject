@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">SchoolProject</string>
-    <string name="sign_in">Sign In</string>
-    <string name="sign_up">Sign Up</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="username" translatable="false">Username</string>
@@ -9,8 +7,14 @@
     <string name="name">Name</string>
     <string name="generic_error">Something wrong happened. Please try again.</string>
     <string name="email_error">Please insert a valid email.</string>
-
-    <!-- SignUpScreen -->
+    <!-- SignUpView -->
+    <string name="register">Register</string>
     <string name="create_account">Create account</string>
-    <string name="password_error">Your password should have at least six digits and include one digit, one lower case letter and one upper case letter.</string>
+    <string name="password_error">Your password should have at least six digits</string>
+    <!-- LoginView -->
+    <string name="sign_in">Sign In</string>
+    <string name="login_details">Enter your login details</string>
+    <string name="empty_password_error">Password cannot be empty.</string>
+    <!--    ClassroomView-->
+    <string name="answer">Answer</string>
 </resources>

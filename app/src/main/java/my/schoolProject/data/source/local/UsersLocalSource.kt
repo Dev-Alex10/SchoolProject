@@ -21,7 +21,7 @@ class UsersLocalSource @Inject constructor(private val userDao: UserDao) {
     }
 
 
-    fun insert(user: User) {
+    suspend fun insert(user: User) {
         userDao.insert(user.toDatabaseEntity())
     }
 

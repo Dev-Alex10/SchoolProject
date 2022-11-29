@@ -2,5 +2,6 @@ package my.schoolProject.data.source.domain.user
 
 interface UserRepository {
     fun getUser(email: String): User
-    fun insertUser(user: User)
+    suspend fun insertUser(user: User)
+    fun deleteAllUsers()
 }
