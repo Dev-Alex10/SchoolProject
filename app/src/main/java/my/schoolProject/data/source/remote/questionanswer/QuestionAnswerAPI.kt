@@ -12,9 +12,9 @@ interface QuestionAnswerAPI {
     @GET("/api/answers")
     suspend fun getAnswers(): List<AnswerAPI>
 
-    @GET("/api/question/{id}")
+    @GET("/api/questions/{id}")
     suspend fun getQuestion(@Path("id") id: Long): QuestionAPI
 
-    @GET("/api/answer/{id}")
+    @GET("/api/answers/{id}")
     suspend fun getAnswer(@Path("id") id: Long): AnswerAPI
 }

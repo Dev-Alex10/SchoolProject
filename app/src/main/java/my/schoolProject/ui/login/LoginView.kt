@@ -1,16 +1,16 @@
 package my.schoolProject.ui.login
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Checkbox
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import my.schoolProject.utils.common.buttonModifier
 import my.schoolProject.utils.common.textFieldModifier
@@ -37,7 +37,7 @@ fun LoginView(
             .fillMaxHeight()
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+//        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         EmailField(
             uiState.email,
@@ -49,6 +49,18 @@ fun LoginView(
             uiState.password, loginViewModel::onPasswordChange, Modifier
                 .textFieldModifier()
         )
+        Row(
+            modifier = Modifier.padding(start = 16.dp, end = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = "Remember login")
+            Checkbox(
+                checked = uiState.remember,
+                onCheckedChange = loginViewModel::onRememberChange
+            )
+        }
+
         val context = LocalContext.current
         BasicButton(
             AppText.sign_in,

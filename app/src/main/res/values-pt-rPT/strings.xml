@@ -5,7 +5,7 @@
     <string name="register">Registar</string>
     <string name="email">Email</string>
     <string name="password">Palavra-chave</string>
-    <string name="error">Erro</string>
+    <string name="error">Erro: </string>
     <string name="name">Nome</string>
     <string name="generic_error">Algo de errado aconteceu. Por favor tente novamente</string>
     <string name="email_error">Inserir email válido</string>
@@ -16,4 +16,5 @@
     <string name="login_details">Preencha os seus detalhes de login</string>
     <!--    ClassroomView-->
     <string name="answer">Resposta</string>
+    <string name="correctAnswer"> Resposta correcta é: &#160;</string>
 </resources>

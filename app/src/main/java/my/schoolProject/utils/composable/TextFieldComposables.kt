@@ -1,7 +1,6 @@
 package my.schoolProject.utils.composable
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -9,10 +8,12 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -96,13 +97,14 @@ private fun PasswordField(
 
 @Composable
 fun AnswerField(
-    value: String,
+    value: String?,
     onNewValue: (String) -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean
+    valid: Boolean,
+    show: Boolean
 ) {
     OutlinedTextField(
-        value = value,
+        value = value.orEmpty(),
         onValueChange = { onNewValue(it) },
         placeholder = {
             Text(
@@ -112,7 +114,22 @@ fun AnswerField(
             )
         },
         modifier = modifier,
-        enabled = enabled
+        trailingIcon = {
+            if (valid && show) {
+                Icon(
+                    imageVector = Icons.Filled.CheckCircle,
+                    contentDescription = null,
+                    tint = Color.Green
+                )
+            } else if (show) {
+                Icon(
+                    painter = painterResource(id = my.schoolProject.R.drawable.cancel),
+                    contentDescription = null,
+                    tint = Color.Red
+                )
+            }
+        },
+        enabled = !show
     )
 }
 

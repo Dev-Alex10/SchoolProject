@@ -3,7 +3,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="username" translatable="false">Username</string>
-    <string name="error">Error</string>
+    <string name="error">Error:</string>
     <string name="name">Name</string>
     <string name="generic_error">Something wrong happened. Please try again.</string>
     <string name="email_error">Please insert a valid email.</string>
@@ -17,4 +17,5 @@
     <string name="empty_password_error">Password cannot be empty.</string>
     <!--    ClassroomView-->
     <string name="answer">Answer</string>
+    <string name="correctAnswer"> Correct Answer is &#160;</string>
 </resources>

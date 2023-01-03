@@ -2,10 +2,12 @@ package my.schoolProject
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import my.schoolProject.di.DataStoreManager
 import my.schoolProject.ui.classroom.ClassroomView
 import my.schoolProject.ui.login.LoginView
 import my.schoolProject.ui.register.RegisterView
@@ -22,7 +24,7 @@ fun SchoolNavHost(navController: NavHostController, modifier: Modifier) {
         }
         composable(route = Register.route) {
             RegisterView(modifier = modifier, onClickRegister = {
-                navController.navigateSingleTopTo(Login.route)
+                navController.navigateSingleTopTo(Classroom.route)
             })
         }
         composable(route = Classroom.route) {
