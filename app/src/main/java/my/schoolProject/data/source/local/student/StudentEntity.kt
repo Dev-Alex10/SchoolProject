@@ -18,14 +18,14 @@ fun StudentEntity.toDomain(): Student {
     return Student(
         name = user.name,
         email = user.email,
-        password = user.password,
+        password = user.idToken,
         internalId = internalId
     )
 }
 
 fun Student.toDatabaseEntity(): StudentEntity {
     return StudentEntity(
-        UserEntity(name = name, email = email, password = password),
+        UserEntity(name = name, email = email, idToken = password),
         internalId = internalId
     )
 }

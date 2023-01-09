@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import my.schoolProject.data.source.domain.user.User
@@ -32,6 +34,7 @@ class RegisterViewModel @Inject constructor(
     private val email get() = uiState.value.email
     private val password get() = uiState.value.password
     private val name get() = uiState.value.name
+    private var token: String? = null
     fun onNameChange(newValue: String) {
         uiState.value = uiState.value.copy(name = newValue)
     }
@@ -59,9 +62,13 @@ class RegisterViewModel @Inject constructor(
         }
         viewModelScope.launch {
             suspendCoroutine<Result<Unit>> {
-                accountService.createAccount(email, password) { error ->
+                accountService.createAccount(name,email, password) { error ->
                     if (error == null) {
-                        it.resume(Result.success(Unit))
+                        Firebase.auth.currentUser?.getIdToken(false)
+                            ?.addOnCompleteListener { task ->
+                                token = task.result?.token
+                                it.resume(Result.success(Unit))
+                            }
                     } else {
                         it.resume(Result.failure(error))
                     }
@@ -69,7 +76,9 @@ class RegisterViewModel @Inject constructor(
             }.fold(
                 onSuccess = {
                     onClick()
-                    repository.insertUser(User(name = name, email, password))
+                    if (!token.isNullOrBlank()) {
+                        repository.insertUser(User(name = name, email, token!!))
+                    }
                 },
                 onFailure = {
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()

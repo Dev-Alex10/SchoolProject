@@ -3,5 +3,5 @@ package my.schoolProject.data.source.domain.user
 data class User(
     val name: String,
     val email: String,
-    val password: String
+    val idToken: String
 )

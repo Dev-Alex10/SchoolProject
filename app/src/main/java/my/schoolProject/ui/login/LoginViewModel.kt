@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import my.schoolProject.R
@@ -33,13 +32,8 @@ class LoginViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             dataStore.rememberLoginFlow.collect {
-//                if (it.email.isNotBlank() && it.password.isNotBlank()) {
-//
-//                }
-                println("SIM $it")
+                println("IT $it \nState ${uiState.value} ")
                 uiState.value = uiState.value.copy(
-                    email = it.email,
-                    password = it.password,
                     remember = it.rememberLogin
                 )
             }
@@ -82,10 +76,6 @@ class LoginViewModel @Inject constructor(
                 }
             }.fold(
                 onSuccess = {
-                    if (uiState.value.remember) {
-                        dataStore.setEmail(email)
-                        dataStore.setPassword(password)
-                    }
                     onClick()
                 },
                 onFailure = {
@@ -95,17 +85,25 @@ class LoginViewModel @Inject constructor(
             )
         }
     }
-//    fun onForgotPasswordClick() {
-//        if (!email.isValidEmail()) {
-//            SnackbarManager.showMessage(AppText.email_error)
-//            return
-//        }
-//
-//        viewModelScope.launch(showErrorExceptionHandler) {
-//            accountService.sendRecoveryEmail(email) { error ->
-//                if (error != null) onError(error)
-//                else SnackbarManager.showMessage(AppText.recovery_email_sent)
-//            }
-//        }
-//    }
+
+    /*   fun onForgotPasswordClick() {
+            if (!email.isValidEmail()) {
+                SnackbarManager.showMessage(AppText.email_error)
+                return
+            }
+
+            viewModelScope.launch(showErrorExceptionHandler) {
+                accountService.sendRecoveryEmail(email) { error ->
+                    if (error != null) onError(error)
+                    else SnackbarManager.showMessage(AppText.recovery_email_sent)
+                }
+            }
+        }*/
+    override fun onCleared() {
+        println("SIUUUUUUU")
+        if (!uiState.value.remember) {
+            accountService.signOut()
+        }
+        super.onCleared()
+    }
 }

@@ -18,8 +18,6 @@ private val Context.dataStore by preferencesDataStore("settings")
 
 private object PreferencesKeys {
     val REMEMBER_LOGIN = booleanPreferencesKey("remember_login")
-    val USER_EMAIL = stringPreferencesKey("user_email")
-    val USER_PASSWORD = stringPreferencesKey("user_password")
 }
 
 
@@ -33,16 +31,9 @@ class DataStoreManager @Inject constructor(@ApplicationContext applicationContex
         }
     }
 
-    suspend fun setPassword(password: String) {
-        settingsDataStore.edit { settings ->
-            settings[PreferencesKeys.USER_PASSWORD] = password
-        }
-    }
 
-    suspend fun setEmail(email: String) {
-        settingsDataStore.edit { settings ->
-            settings[PreferencesKeys.USER_EMAIL] = email
-        }
+    suspend fun clear() {
+        settingsDataStore.edit { it.clear() }
     }
 
     val rememberLoginFlow: Flow<UserPreferences> = settingsDataStore.data
@@ -55,10 +46,9 @@ class DataStoreManager @Inject constructor(@ApplicationContext applicationContex
             }
         }.map { preferences ->
             val remember = preferences[PreferencesKeys.REMEMBER_LOGIN] ?: false
-            val password = preferences[PreferencesKeys.USER_PASSWORD] ?: ""
-            val email = preferences[PreferencesKeys.USER_EMAIL] ?: ""
-            UserPreferences(remember, email, password)
+
+            UserPreferences(remember)
         }
 
-    data class UserPreferences(val rememberLogin: Boolean, val email: String, val password: String)
+    data class UserPreferences(val rememberLogin: Boolean)
 }

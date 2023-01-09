@@ -11,14 +11,14 @@ data class UserEntity(
     val name: String,
     @PrimaryKey(autoGenerate = false)
     val email: String,
-    @ColumnInfo(name = "password")
-    val password: String
+    @ColumnInfo(name = "idToken")
+    val idToken: String
 )
 
 fun UserEntity.toDomain(): User {
-    return User(name, email, password)
+    return User(name, email, idToken)
 }
 
 fun User.toDatabaseEntity(): UserEntity {
-    return UserEntity(name, email, password)
+    return UserEntity(name, email, idToken)
 }

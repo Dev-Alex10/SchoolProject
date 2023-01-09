@@ -9,11 +9,15 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import my.schoolProject.R
 import my.schoolProject.data.source.domain.questionAnswer.QuestionAnswerRepository
+import my.schoolProject.data.source.remote.accountService.AccountService
+import my.schoolProject.di.DataStoreManager
 import javax.inject.Inject
 
 @HiltViewModel
 class ClassroomViewModel @Inject constructor(
     private val repository: QuestionAnswerRepository,
+    private val accountService: AccountService,
+    private val dataStore: DataStoreManager,
     @ApplicationContext private val context: Context
 ) :
     ViewModel() {
@@ -33,6 +37,13 @@ class ClassroomViewModel @Inject constructor(
         )
     }
 
+    fun signOut(onClickSignOut: () -> Unit) {
+        viewModelScope.launch {
+            accountService.signOut()
+            dataStore.clear()
+            onClickSignOut()
+        }
+    }
 
     private fun getQuestions() {
         viewModelScope.launch {

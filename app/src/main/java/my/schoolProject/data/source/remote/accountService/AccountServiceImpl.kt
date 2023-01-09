@@ -17,6 +17,7 @@ limitations under the License.
 package my.schoolProject.data.source.remote.accountService
 
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
 
@@ -33,9 +34,16 @@ class AccountServiceImpl @Inject constructor() : AccountService {
         return Firebase.auth.currentUser?.uid.orEmpty()
     }
 
+
     override fun signIn(email: String, password: String, onResult: (Throwable?) -> Unit) {
+
         Firebase.auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { onResult(it.exception) }
+            .addOnCompleteListener {
+//                println(Firebase.auth.currentUser?.email)
+//                println(Firebase.auth.currentUser?.displayName)
+//                println(Firebase.auth.currentUser?.uid)
+                onResult(it.exception)
+            }
     }
 
     override fun sendRecoveryEmail(email: String, onResult: (Throwable?) -> Unit) {
@@ -48,9 +56,24 @@ class AccountServiceImpl @Inject constructor() : AccountService {
             .addOnCompleteListener { onResult(it.exception) }
     }
 
-    override fun createAccount(email: String, password: String, onResult: (Throwable?) -> Unit) {
+    override fun createAccount(
+        name: String,
+        email: String,
+        password: String,
+        onResult: (Throwable?) -> Unit
+    ) {
         Firebase.auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { onResult(it.exception) }
+            .addOnCompleteListener {
+                updateProfile(name)
+                onResult(it.exception)
+            }
+    }
+
+    override fun updateProfile(name: String?, email: String?, photoUrl: String?) {
+        val profileUpdates = userProfileChangeRequest {
+            displayName = name
+        }
+        Firebase.auth.currentUser?.updateProfile(profileUpdates)
     }
 
     override fun deleteAccount(onResult: (Throwable?) -> Unit) {
