@@ -1,11 +1,11 @@
 package my.schoolProject.utils.composable
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CheckCircle
@@ -19,6 +19,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import my.schoolProject.R
+import my.schoolProject.ui.classroom.ClassroomUiState
+import my.schoolProject.ui.classroom.ClassroomViewModel
+import my.schoolProject.utils.common.textFieldModifier
 import my.schoolProject.R.drawable as AppIcon
 import my.schoolProject.R.string as AppText
 
@@ -133,3 +137,46 @@ fun AnswerField(
     )
 }
 
+@Composable
+fun QuestionAndAnswer(
+    modifier: Modifier,
+    uiState: ClassroomUiState,
+    classroomViewModel: ClassroomViewModel
+) {
+    LazyColumn(modifier = modifier.fillMaxSize()) {
+        items(uiState.questions) {
+            Text(text = it.questionString)
+            AnswerField(
+                value = uiState.answer[it.questionString].orEmpty(),
+                onNewValue = { value ->
+                    classroomViewModel.onAnswerChange(
+                        value,
+                        it.questionString
+                    )
+                },
+                modifier = Modifier
+                    .textFieldModifier(),
+                valid = uiState.valid.isEmpty() || uiState.valid[it.questionString]!!,
+                show = uiState.showSolution
+            )
+            if (uiState.showSolution) {
+                Text(
+                    text = stringResource(id = R.string.correctAnswer)
+                            + uiState.correctAnswer[it.questionString]!!
+                )
+            }
+            classroomViewModel.checkIfValid(
+                it.answer_id,
+                uiState.answer[it.questionString].orEmpty(),
+                it.questionString
+            )
+        }
+        item {
+            if (!uiState.answer.containsValue("") && uiState.answer.size == uiState.questions.size) {
+                Button(onClick = { classroomViewModel.checkAllValid() }) {
+                    Text(text = "Check")
+                }
+            }
+        }
+    }
+}

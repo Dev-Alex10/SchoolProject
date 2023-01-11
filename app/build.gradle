@@ -89,4 +89,6 @@ dependencies {
 
     //SQL Cipher
     implementation "net.zetetic:android-database-sqlcipher:4.5.2"
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.2.2")
 }

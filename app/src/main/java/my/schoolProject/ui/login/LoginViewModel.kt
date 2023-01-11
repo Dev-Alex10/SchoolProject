@@ -32,7 +32,6 @@ class LoginViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             dataStore.rememberLoginFlow.collect {
-                println("IT $it \nState ${uiState.value} ")
                 uiState.value = uiState.value.copy(
                     remember = it.rememberLogin
                 )
@@ -100,7 +99,6 @@ class LoginViewModel @Inject constructor(
             }
         }*/
     override fun onCleared() {
-        println("SIUUUUUUU")
         if (!uiState.value.remember) {
             accountService.signOut()
         }

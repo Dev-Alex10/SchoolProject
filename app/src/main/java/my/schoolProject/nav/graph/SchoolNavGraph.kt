@@ -8,8 +8,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import my.schoolProject.nav.destinations.Classroom
+import my.schoolProject.nav.destinations.Login
+import my.schoolProject.nav.destinations.Profile
+import my.schoolProject.nav.destinations.Register
 import my.schoolProject.ui.classroom.ClassroomView
 import my.schoolProject.ui.login.LoginView
+import my.schoolProject.ui.profile.ProfileView
 import my.schoolProject.ui.register.RegisterView
 
 @Composable
@@ -41,6 +46,9 @@ fun SchoolNavHost(navController: NavHostController, modifier: Modifier) {
                     navController.navigateSingleTopTo(Login.route)
                 }
             )
+        }
+        composable(route = Profile.route) {
+            ProfileView()
         }
     }
 }
