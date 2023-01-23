@@ -3,7 +3,7 @@ package my.schoolProject.ui.classroom
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -16,13 +16,13 @@ fun ClassroomView(
     onClickSignOut: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val uiState by classroomViewModel.uiState
+    val viewState = classroomViewModel.viewState.collectAsState()
     Scaffold(
         content = {
-            if (uiState.questions.isEmpty()) {
-                Text(text = uiState.errorMessage, color = Color.Red)
+            if (viewState.value.fields.isEmpty()) {
+                Text(text = viewState.value.errorMessage, color = Color.Red)
             } else {
-                QuestionAndAnswer(modifier, uiState, classroomViewModel)
+                QuestionAndAnswer(modifier, classroomViewModel)
             }
         },
         floatingActionButton = {

@@ -1,12 +1,11 @@
 package my.schoolProject.ui.classroom
 
 import android.content.Context
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import my.schoolProject.R
 import my.schoolProject.data.source.domain.questionAnswer.QuestionAnswerRepository
@@ -22,20 +21,24 @@ class ClassroomViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) :
     ViewModel() {
-    var uiState = mutableStateOf(ClassroomUiState())
-        private set
+    private val state: MutableStateFlow<State> =
+        MutableStateFlow(State(emptySet(), emptyMap(), false, ""))
+    val viewState: StateFlow<ViewState> = state
+        .map {
+            it.toViewState()
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = state.value.toViewState()
+        )
 
     init {
         getQuestions()
     }
 
-    fun onAnswerChange(newValue: String, question: String) {
-        uiState.value = uiState.value.copy(
-            answer = uiState.value.answer + Pair(
-                question,
-                newValue
-            )
-        )
+    fun onAnswerChange(newValue: String, question: Question) {
+        state.value =
+            state.value.copy(userAnswers = state.value.userAnswers + Pair(question, newValue))
     }
 
     fun signOut(onClickSignOut: () -> Unit) {
@@ -50,38 +53,38 @@ class ClassroomViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val questions = repository.getQuestions()
-                uiState.value = uiState.value.copy(questions = questions)
+                questions.forEach {
+                    val answer = repository.getAnswer(it.answer_id)
+                    state.value = state.value.copy(
+                        questions = state.value.questions + Question(
+                            it.questionString,
+                            correctAnswer = answer.answerString
+                        )
+                    )
+                }
             } catch (e: Exception) {
-                uiState.value =
-                    uiState.value
+                state.value =
+                    state.value
                         .copy(errorMessage = "${context.getString(R.string.error)} ${e.message}")
             }
         }
     }
 
-    fun checkIfValid(idAnswer: Long, answerGiven: String, question: String) {
-        //check questions and answers, and if they are valid
-        viewModelScope.launch {
-            val correctAnswer = repository.getAnswer(idAnswer)
-            uiState.value = uiState.value.copy(
-                correctAnswer = uiState.value.correctAnswer + Pair(
-                    question,
-                    correctAnswer.answerString
-                )
-            )
-            if (correctAnswer.answerString.lowercase() == answerGiven.lowercase()) {
-                uiState.value =
-                    uiState.value.copy(valid = uiState.value.valid + Pair(question, true))
-            } else {
-                uiState.value =
-                    uiState.value.copy(valid = uiState.value.valid + Pair(question, false))
-            }
-        }
+    fun checkAllAnswered(): Boolean {
+        return state.value.userAnswers.values.size == state.value.questions.size
     }
 
-    fun checkAllValid(): Boolean {
-        val valid = !uiState.value.valid.containsValue(false)
-        uiState.value = uiState.value.copy(showSolution = true)
-        return valid
+    fun checkAllValid() {
+        state.value = state.value.copy(showResult = true)
+    }
+
+    fun clearResults() {
+        state.value =
+            State(
+                questions = state.value.questions,
+                userAnswers = emptyMap(),
+                showResult = false,
+                ""
+            )
     }
 }

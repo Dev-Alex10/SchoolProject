@@ -1,7 +1,7 @@
 package my.schoolProject.utils.composable
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -19,9 +20,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 import my.schoolProject.R
-import my.schoolProject.ui.classroom.ClassroomUiState
 import my.schoolProject.ui.classroom.ClassroomViewModel
+import my.schoolProject.ui.classroom.ViewState
 import my.schoolProject.utils.common.textFieldModifier
 import my.schoolProject.R.drawable as AppIcon
 import my.schoolProject.R.string as AppText
@@ -127,7 +129,7 @@ fun AnswerField(
                 )
             } else if (show) {
                 Icon(
-                    painter = painterResource(id = my.schoolProject.R.drawable.cancel),
+                    painter = painterResource(id = R.drawable.cancel),
                     contentDescription = null,
                     tint = Color.Red
                 )
@@ -140,41 +142,54 @@ fun AnswerField(
 @Composable
 fun QuestionAndAnswer(
     modifier: Modifier,
-    uiState: ClassroomUiState,
     classroomViewModel: ClassroomViewModel
 ) {
+    val viewState = classroomViewModel.viewState.collectAsState()
     LazyColumn(modifier = modifier.fillMaxSize()) {
-        items(uiState.questions) {
-            Text(text = it.questionString)
+        items(viewState.value.fields) {
+            Text(text = it.question.value)
             AnswerField(
-                value = uiState.answer[it.questionString].orEmpty(),
+                value = it.userInput,
                 onNewValue = { value ->
                     classroomViewModel.onAnswerChange(
                         value,
-                        it.questionString
+                        it.question
                     )
                 },
                 modifier = Modifier
                     .textFieldModifier(),
-                valid = uiState.valid.isEmpty() || uiState.valid[it.questionString]!!,
-                show = uiState.showSolution
+                valid = it.state == ViewState.Field.Correct,
+                show = viewState.value.showResult
             )
-            if (uiState.showSolution) {
+            if (viewState.value.showResult) {
                 Text(
                     text = stringResource(id = R.string.correctAnswer)
-                            + uiState.correctAnswer[it.questionString]!!
+                            + it.question.correctAnswer
                 )
             }
-            classroomViewModel.checkIfValid(
-                it.answer_id,
-                uiState.answer[it.questionString].orEmpty(),
-                it.questionString
-            )
+            Spacer(modifier = Modifier.height(25.dp))
+//            classroomViewModel.checkIfValidTest(
+//                answerState,
+//                it.correctAnswer
+//            )
         }
         item {
-            if (!uiState.answer.containsValue("") && uiState.answer.size == uiState.questions.size) {
-                Button(onClick = { classroomViewModel.checkAllValid() }) {
-                    Text(text = "Check")
+            if (classroomViewModel.checkAllAnswered()) {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Button(
+                        onClick = { classroomViewModel.checkAllValid() }, modifier = Modifier.align(
+                            Alignment.TopStart
+                        )
+                    ) {
+                        Text(text = "Check")
+                    }
+                    Button(
+                        onClick = { classroomViewModel.clearResults() }, modifier = Modifier.align(
+                            Alignment.TopEnd
+                        )
+                    ) {
+                        Text(text = "Clear results")
+                    }
                 }
             }
         }
