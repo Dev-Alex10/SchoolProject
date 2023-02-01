@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -26,7 +27,8 @@ import kotlin.math.max
 
 @Composable
 fun ProfileView(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
     val currentUser = Firebase.auth.currentUser!!
     CollapsibleScreen()

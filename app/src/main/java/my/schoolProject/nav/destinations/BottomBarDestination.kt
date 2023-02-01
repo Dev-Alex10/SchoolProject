@@ -21,7 +21,7 @@ object Profile : BottomBarDestination {
     override val icon = Icons.Filled.AccountCircle
 }
 
-object History : BottomBarDestination {
-    override val route = "History"
+object Lesson : BottomBarDestination {
+    override val route = "Lesson"
     override val icon = Icons.Filled.Search
 }

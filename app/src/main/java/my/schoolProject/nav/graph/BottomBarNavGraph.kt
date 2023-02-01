@@ -17,7 +17,7 @@ fun BottomBarNavHost(navController: NavHostController) {
     val currentRoute = navBackStackEntry?.destination?.route
     if (currentRoute != Login.route && currentRoute != Register.route) {
         BottomNavigation {
-            val items = listOf(Classroom, Profile, History)
+            val items = listOf(Classroom, Profile, Lesson)
             items.forEach { screen ->
                 BottomNavigationItem(
                     icon = {
