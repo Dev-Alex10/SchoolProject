@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import my.schoolProject.ui.classroom.ClassroomViewModel
 
 @Composable
 fun BasicTextButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit) {
@@ -32,11 +31,10 @@ fun BasicButton(@StringRes text: Int, modifier: Modifier, action: () -> Unit) {
 
 @Composable
 fun SignOutButton(
-    classroomViewModel: ClassroomViewModel,
     onClickSignOut: () -> Unit
 ) {
     Button(
-        onClick = { classroomViewModel.signOut(onClickSignOut) },
+        onClick = { onClickSignOut() },
         shape = RoundedCornerShape(30)
     ) {
         Text(text = "Sign out")

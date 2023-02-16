@@ -1,18 +1,17 @@
 package my.schoolProject.utils.composable
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -20,11 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
 import my.schoolProject.R
-import my.schoolProject.ui.classroom.ClassroomViewModel
-import my.schoolProject.ui.classroom.ViewState
-import my.schoolProject.utils.common.textFieldModifier
+import my.schoolProject.ui.quiz.FieldViewState
 import my.schoolProject.R.drawable as AppIcon
 import my.schoolProject.R.string as AppText
 
@@ -106,7 +102,7 @@ fun AnswerField(
     value: String?,
     onNewValue: (String) -> Unit,
     modifier: Modifier = Modifier,
-    valid: Boolean,
+    state: FieldViewState.ResultState,
     show: Boolean
 ) {
     OutlinedTextField(
@@ -121,28 +117,32 @@ fun AnswerField(
         },
         modifier = modifier,
         trailingIcon = {
-            if (valid && show) {
-                Icon(
-                    imageVector = Icons.Filled.CheckCircle,
-                    contentDescription = null,
-                    tint = Color.Green
-                )
-            } else if (show) {
-                Icon(
-                    painter = painterResource(id = R.drawable.cancel),
-                    contentDescription = null,
-                    tint = Color.Red
-                )
-            }
+            CorrectOrIncorrectIcon(state)
         },
         enabled = !show
     )
 }
 
 @Composable
+fun CorrectOrIncorrectIcon(state: FieldViewState.ResultState) {
+    if (state == FieldViewState.Correct) {
+        Icon(
+            imageVector = Icons.Filled.CheckCircle,
+            contentDescription = null,
+            tint = Color.Green
+        )
+    } else if (state is FieldViewState.Wrong) {
+        Icon(
+            painter = painterResource(id = R.drawable.cancel),
+            contentDescription = null,
+            tint = Color.Red
+        )
+    }
+}
+/*
+@Composable
 fun QuestionAndAnswer(
-    modifier: Modifier,
-    classroomViewModel: ClassroomViewModel
+    modifier: Modifier
 ) {
     val viewState = classroomViewModel.viewState.collectAsState()
     LazyColumn(modifier = modifier.fillMaxSize()) {
@@ -158,7 +158,7 @@ fun QuestionAndAnswer(
                 },
                 modifier = Modifier
                     .textFieldModifier(),
-                valid = it.state == ViewState.Field.Correct,
+                state = it.resultState == FieldViewState.Correct,
                 show = viewState.value.showResult
             )
             if (viewState.value.showResult) {
@@ -195,3 +195,4 @@ fun QuestionAndAnswer(
         }
     }
 }
+*/

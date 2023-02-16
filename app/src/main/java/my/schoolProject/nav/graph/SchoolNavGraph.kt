@@ -9,14 +9,14 @@ import androidx.navigation.compose.composable
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import my.schoolProject.nav.destinations.*
-import my.schoolProject.ui.classroom.ClassroomView
 import my.schoolProject.ui.lesson.LessonView
 import my.schoolProject.ui.login.LoginView
 import my.schoolProject.ui.profile.ProfileView
+import my.schoolProject.ui.quiz.QuizView
 import my.schoolProject.ui.register.RegisterView
 
 @Composable
-fun SchoolNavHost(navController: NavHostController, modifier: Modifier) {
+fun SchoolNavHost(navController: NavHostController, modifier: Modifier, openYoutube: () -> Unit) {
     NavHost(
         navController = navController,
         startDestination = if (Firebase.auth.currentUser == null) Login.route else Classroom.route,
@@ -38,12 +38,12 @@ fun SchoolNavHost(navController: NavHostController, modifier: Modifier) {
         }
         //Question Answer
         composable(route = Classroom.route) {
-            ClassroomView(
-                modifier = modifier,
-                onClickSignOut = {
-                    navController.navigateSingleTopTo(Login.route)
-                }
-            )
+//            ClassroomView(
+//                modifier = modifier,
+//            )
+            QuizView(onClickSignOut = {
+                navController.navigateSingleTopTo(Login.route)
+            })
         }
         //Profile
         composable(route = Profile.route) {
@@ -51,7 +51,7 @@ fun SchoolNavHost(navController: NavHostController, modifier: Modifier) {
         }
         //Lesson
         composable(route = Lesson.route) {
-            LessonView()
+            LessonView(openYoutube = openYoutube)
         }
     }
 }

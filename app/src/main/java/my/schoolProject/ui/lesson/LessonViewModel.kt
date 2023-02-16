@@ -2,6 +2,7 @@ package my.schoolProject.ui.lesson
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.exoplayer2.ExoPlayer
@@ -20,11 +21,12 @@ private var API_KEY = "AIzaSyARh5mcLg-BWEZ_dxkCEm8WCNKqeGyFXOU"
 @HiltViewModel
 class LessonViewModel @Inject constructor() : ViewModel() {
     val urlYt =
-        "https://youtu.be/JwmnF4d30DE"
+        "https://youtu.be/xc8nAcVvpxY"
     private val url =
         "https://joy1.videvo.net/videvo_files/video/free/2014-12/large_watermarked/Raindrops_Videvo_preview.mp4"
-
-    fun prepareVideo(context: Context): ExoPlayer {
+    var uiState = mutableStateOf(LessonUiState())
+        private set
+    fun prepareVideo(context: Context) {
         val exoPlayer = ExoPlayer.Builder(context).build().apply {
             val dataSourceFactory = DefaultDataSource.Factory(
                 context
@@ -34,7 +36,7 @@ class LessonViewModel @Inject constructor() : ViewModel() {
             setMediaSource(source)
             prepare()
         }
-        return exoPlayer
+        uiState.value = uiState.value.copy(exoPlayer = exoPlayer)
     }
 
     fun prepareYouTubeVideo(myFragment: YouTubePlayerSupportFragmentX, context: Context) {
