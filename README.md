@@ -2,10 +2,14 @@
 I use 
 ## Jetpack Compose
 ## Retrofit
+Access the API
 ## Room Database
+Save User info
 ## Kotlin Coroutines
 ## Datastore
-
+Preferences to remember login
+## Hilt
+For dependency injection
 # Main Objective
 My main objective is to create a small project to undestand the technologies better.
 A simple quiz getting the Questions and answers from a local API. 
