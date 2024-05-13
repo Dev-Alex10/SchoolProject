@@ -9,7 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import my.schoolProject.nav.destinations.*
-import my.schoolProject.navigateSingleTopTo
 
 @Composable
 fun BottomBarNavHost(navController: NavHostController) {

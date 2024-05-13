@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "http://192.168.1.64:3000"
+    private const val BASE_URL = "http://192.168.1.80:3000"
 
     @Provides
     fun provideQuestionAnswers(): QuestionAnswerAPI {

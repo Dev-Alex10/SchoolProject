@@ -5,7 +5,16 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -30,47 +39,51 @@ fun ProfileView(
     modifier: Modifier = Modifier,
     profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
-    val currentUser = Firebase.auth.currentUser!!
-    CollapsibleScreen()
-/*
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-        AsyncImage(
-            model = "https://onaircode.com/wp-content/uploads/2018/04/UID_05.png",
-            contentDescription = "Profile Background",
-            modifier = Modifier
-                .matchParentSize()
-                .padding(bottom = 40.dp)
-                .align(Alignment.TopStart)
-                .clickable { },
-            contentScale = ContentScale.FillBounds
-        )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+    val currentUser = Firebase.auth.currentUser
+    if (currentUser == null) {
+        Text(text = "No User Found")
+    } else {
+        CollapsibleScreen()
+    }
+    /*
+        Box(
             modifier = modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 100.dp)
-                .clickable { }
+                .fillMaxSize()
         ) {
             AsyncImage(
-                model = "https://images.unsplash.com/photo-1671275285749-1d89bf2504f7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80",
-                contentDescription = "Profile Pic",
-                contentScale = ContentScale.Crop,
-                modifier = modifier
-                    .size(128.dp)
-                    .border(BorderStroke(4.dp, Color.Black), RectangleShape)
-                    .clickable {
-                    }
+                model = "https://onaircode.com/wp-content/uploads/2018/04/UID_05.png",
+                contentDescription = "Profile Background",
+                modifier = Modifier
+                    .matchParentSize()
+                    .padding(bottom = 40.dp)
+                    .align(Alignment.TopStart)
+                    .clickable { },
+                contentScale = ContentScale.FillBounds
             )
-            Column(modifier = Modifier) {
-                Text(text = "Email: ${currentUser.email!!}")
-                Text(text = "Name: ${currentUser.displayName!!}")
-                Text(text = "Description: I'm 22 and counting 🤓")
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 100.dp)
+                    .clickable { }
+            ) {
+                AsyncImage(
+                    model = "https://images.unsplash.com/photo-1671275285749-1d89bf2504f7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80",
+                    contentDescription = "Profile Pic",
+                    contentScale = ContentScale.Crop,
+                    modifier = modifier
+                        .size(128.dp)
+                        .border(BorderStroke(4.dp, Color.Black), RectangleShape)
+                        .clickable {
+                        }
+                )
+                Column(modifier = Modifier) {
+                    Text(text = "Email: ${currentUser.email!!}")
+                    Text(text = "Name: ${currentUser.displayName!!}")
+                    Text(text = "Description: I'm 22 and counting 🤓")
+                }
             }
-        }
-    }*/
+        }*/
 }
 
 @Composable
@@ -103,7 +116,7 @@ fun CollapsibleScreen() {
             ) {
                 items(list) { item ->
                     Row {
-                        Text(text = item)
+                        Text(text = item, color = Color.Black, modifier = Modifier.padding(10.dp))
                     }
                 }
             }
@@ -113,7 +126,7 @@ fun CollapsibleScreen() {
 
 @Composable
 private fun ProfileCardCollapsingToolbar(scrollOffset: Float) {
-    val imageSize by animateDpAsState(targetValue = max(72.dp, 128.dp * scrollOffset))
+    val imageSize by animateDpAsState(targetValue = max(72.dp, 128.dp * scrollOffset), label = "")
     val linesCount = max(3f, scrollOffset * 6).toInt()
     Row(
         Modifier

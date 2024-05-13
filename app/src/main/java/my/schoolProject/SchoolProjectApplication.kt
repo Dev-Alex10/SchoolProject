@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.HiltAndroidApp
 import my.schoolProject.nav.graph.BottomBarNavHost
+import my.schoolProject.nav.graph.SchoolNavHost
 import my.schoolProject.ui.theme.SchoolTheme
 import javax.inject.Inject
 

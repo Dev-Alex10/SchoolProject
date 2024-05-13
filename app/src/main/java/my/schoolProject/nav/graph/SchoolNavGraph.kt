@@ -1,4 +1,4 @@
-package my.schoolProject
+package my.schoolProject.nav.graph
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,9 +38,6 @@ fun SchoolNavHost(navController: NavHostController, modifier: Modifier, openYout
         }
         //Question Answer
         composable(route = Classroom.route) {
-//            ClassroomView(
-//                modifier = modifier,
-//            )
             QuizView(onClickSignOut = {
                 navController.navigateSingleTopTo(Login.route)
             })

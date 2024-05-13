@@ -1,5 +1,6 @@
 package my.schoolProject.data.source.local.student
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,6 +12,7 @@ data class StudentEntity(
     @Embedded
     val user: UserEntity,
     @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "internalId")
     val internalId: Long
 )
 

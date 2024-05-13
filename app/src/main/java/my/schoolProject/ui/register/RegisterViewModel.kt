@@ -25,10 +25,8 @@ const val TAGR = "RegisterViewModel"
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val accountService: AccountService,
-    private val repository: UserRepository
-) :
-    ViewModel() {
+    private val accountService: AccountService, private val repository: UserRepository
+) : ViewModel() {
     var uiState = mutableStateOf(RegisterUiState())
         private set
     private val email get() = uiState.value.email
@@ -62,7 +60,7 @@ class RegisterViewModel @Inject constructor(
         }
         viewModelScope.launch {
             suspendCoroutine<Result<Unit>> {
-                accountService.createAccount(name,email, password) { error ->
+                accountService.createAccount(name, email, password) { error ->
                     if (error == null) {
                         Firebase.auth.currentUser?.getIdToken(false)
                             ?.addOnCompleteListener { task ->
@@ -73,18 +71,16 @@ class RegisterViewModel @Inject constructor(
                         it.resume(Result.failure(error))
                     }
                 }
-            }.fold(
-                onSuccess = {
+            }.fold(onSuccess = {
+                if (!token.isNullOrBlank()) {
+                    repository.insertUser(User(name = name, email, token!!))
                     onClick()
-                    if (!token.isNullOrBlank()) {
-                        repository.insertUser(User(name = name, email, token!!))
-                    }
-                },
-                onFailure = {
-                    Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
-                    Log.e(TAGR, "Error ${it.localizedMessage}")
+                    Log.d("RegisterViewModel", "User created ")
                 }
-            )
+            }, onFailure = {
+                Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                Log.e(TAGR, "Error ${it.localizedMessage}")
+            })
         }
     }
 }
