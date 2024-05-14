@@ -1,31 +1,26 @@
 package my.schoolProject.ui.lesson
 
 import android.content.Context
-import android.widget.Toast
+import androidx.annotation.OptIn
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.google.android.youtube.player.YouTubeInitializationResult
-import com.google.android.youtube.player.YouTubePlayer
-import com.google.android.youtube.player.YouTubePlayerSupportFragmentX
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultDataSource
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-private var API_KEY = "AIzaSyARh5mcLg-BWEZ_dxkCEm8WCNKqeGyFXOU"
 
 @HiltViewModel
 class LessonViewModel @Inject constructor() : ViewModel() {
-    val urlYt =
+    private val urlYt =
         "https://youtu.be/xc8nAcVvpxY"
-    private val url =
-        "https://joy1.videvo.net/videvo_files/video/free/2014-12/large_watermarked/Raindrops_Videvo_preview.mp4"
+    private val url = "https://filesamples.com/samples/video/mp4/sample_3840x2160.mp4"
     var uiState = mutableStateOf(LessonUiState())
         private set
+
+    @OptIn(UnstableApi::class)
     fun prepareVideo(context: Context) {
         val exoPlayer = ExoPlayer.Builder(context).build().apply {
             val dataSourceFactory = DefaultDataSource.Factory(
@@ -39,31 +34,10 @@ class LessonViewModel @Inject constructor() : ViewModel() {
         uiState.value = uiState.value.copy(exoPlayer = exoPlayer)
     }
 
-    fun prepareYouTubeVideo(myFragment: YouTubePlayerSupportFragmentX, context: Context) {
-        viewModelScope.launch {
-            myFragment.initialize(API_KEY, object : YouTubePlayer.OnInitializedListener {
-                override fun onInitializationSuccess(
-                    provider: YouTubePlayer.Provider?,
-                    player: YouTubePlayer?,
-                    wasResumed: Boolean
-                ) {
-                    if (player == null) return
-                    if (wasResumed) {
-                        player.play()
-                    } else {
-                        player.cueVideo("xc8nAcVvpxY")
-                        player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-                    }
-                }
-
-                override fun onInitializationFailure(
-                    provider: YouTubePlayer.Provider?,
-                    result: YouTubeInitializationResult?
-                ) {
-                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            })
+    override fun onCleared() {
+        if (uiState.value.exoPlayer != null) {
+            uiState.value.exoPlayer?.release()
         }
+        super.onCleared()
     }
 }

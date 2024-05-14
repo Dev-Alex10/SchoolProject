@@ -16,18 +16,14 @@ import javax.inject.Inject
 class SchoolProjectApplication @Inject constructor() : Application()
 
 @Composable
-fun SchoolApp(openYoutube: () -> Unit) {
+fun SchoolApp() {
     SchoolTheme {
         val navController = rememberNavController()
-        Scaffold(
-            bottomBar = {
-                BottomBarNavHost(navController = navController)
-            }
-        ) {
+        Scaffold(bottomBar = {
+            BottomBarNavHost(navController = navController)
+        }) {
             SchoolNavHost(
-                navController = navController,
-                modifier = Modifier.padding(it),
-                openYoutube = openYoutube
+                navController = navController, modifier = Modifier.padding(it)
             )
         }
     }
