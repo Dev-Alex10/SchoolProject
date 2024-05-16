@@ -18,7 +18,6 @@ import my.schoolProject.utils.composable.CorrectOrIncorrectIcon
 fun Choice(
     choice: Choice,
     enabled: Boolean,
-    state: FieldViewState.ResultState,
     onSelectedAnswer: () -> Unit
 ) {
     Row(
