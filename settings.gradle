@@ -1,3 +1,9 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -8,5 +14,11 @@ dependencyResolutionManagement {
         }
     }
 }
+
 rootProject.name = "SchoolProject"
 include ':app'
+include ':login'
+include ':lesson'
+include ':quiz'
+include ':register'
+include ':profile'

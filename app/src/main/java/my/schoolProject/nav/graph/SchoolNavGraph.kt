@@ -6,6 +6,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.lesson.ui.LessonView
+import com.example.login.ui.LoginView
+import com.example.quiz.ui.QuizView
+import com.example.register.ui.RegisterView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import my.schoolProject.nav.destinations.Classroom
@@ -13,11 +17,7 @@ import my.schoolProject.nav.destinations.Lesson
 import my.schoolProject.nav.destinations.Login
 import my.schoolProject.nav.destinations.Profile
 import my.schoolProject.nav.destinations.Register
-import my.schoolProject.ui.lesson.LessonView
-import my.schoolProject.ui.login.LoginView
-import my.schoolProject.ui.profile.ProfileView
-import my.schoolProject.ui.quiz.QuizView
-import my.schoolProject.ui.register.RegisterView
+import com.example.profile.ui.ProfileView
 
 @Composable
 fun SchoolNavHost(navController: NavHostController, modifier: Modifier) {

@@ -7,9 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import my.schoolProject.data.source.local.AppDatabase
-import my.schoolProject.data.source.local.student.StudentDao
-import my.schoolProject.data.source.local.user.UserDao
+import com.example.login.data.local.AppDatabase
+import com.example.login.data.student.StudentDao
+import com.example.login.data.user.UserDao
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 import javax.inject.Singleton

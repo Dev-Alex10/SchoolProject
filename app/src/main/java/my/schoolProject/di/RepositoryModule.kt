@@ -4,12 +4,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import my.schoolProject.data.source.domain.questionAnswer.QuestionAnswerRepository
-import my.schoolProject.data.source.domain.questionAnswer.QuestionAnswerRepositoryImpl
+import com.example.quiz.questionAnswer.QuestionAnswerRepository
+import com.example.quiz.questionAnswer.QuestionAnswerRepositoryImpl
 import my.schoolProject.data.source.domain.user.DefaultUserRepository
-import my.schoolProject.data.source.domain.user.UserRepository
-import my.schoolProject.data.source.local.UsersLocalSource
-import my.schoolProject.data.source.remote.RemoteDataSource
+import com.example.login.domain.user.UserRepository
+import com.example.login.data.UsersLocalSource
+import com.example.quiz.data.RemoteDataSource
 import javax.inject.Singleton
 
 
@@ -28,8 +28,8 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideQuestionAnswer(
-        remoteDataSource: RemoteDataSource
-    ): QuestionAnswerRepository {
-        return QuestionAnswerRepositoryImpl(remoteDataSource)
+        remoteDataSource: com.example.quiz.data.RemoteDataSource
+    ): com.example.quiz.questionAnswer.QuestionAnswerRepository {
+        return com.example.quiz.questionAnswer.QuestionAnswerRepositoryImpl(remoteDataSource)
     }
 }

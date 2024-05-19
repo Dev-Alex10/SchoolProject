@@ -20,12 +20,12 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
-import my.schoolProject.data.source.remote.accountService.AccountService
-import my.schoolProject.data.source.remote.accountService.AccountServiceImpl
+import com.example.register.data.AccountService
+import com.example.register.data.AccountServiceImpl
 
 @Module
 @InstallIn(ViewModelComponent::class)
 abstract class ServiceModule {
     @Binds
-    abstract fun provideAccountService(impl: AccountServiceImpl): AccountService
+    abstract fun provideAccountService(impl: com.example.register.data.AccountServiceImpl): com.example.register.data.AccountService
 }

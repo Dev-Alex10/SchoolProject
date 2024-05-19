@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import my.schoolProject.data.source.remote.questionanswer.QuestionAnswerAPI
+import com.example.quiz.data.remote.questionanswer.QuestionAnswerAPI
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,7 +18,7 @@ object NetworkModule {
     private const val BASE_URL = "http://192.168.1.80:3000"
 
     @Provides
-    fun provideQuestionAnswers(): QuestionAnswerAPI {
+    fun provideQuestionAnswers(): com.example.quiz.data.remote.questionanswer.QuestionAnswerAPI {
         return Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(
                 GsonConverterFactory.create(
@@ -35,6 +35,6 @@ object NetworkModule {
                     ).build()
             )
             .build()
-            .create(QuestionAnswerAPI::class.java)
+            .create(com.example.quiz.data.remote.questionanswer.QuestionAnswerAPI::class.java)
     }
 }

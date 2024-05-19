@@ -18,4 +18,5 @@
     <!--    ClassroomView-->
     <string name="answer">Answer</string>
     <string name="correctAnswer"> Correct Answer is &#160;</string>
+      <string name="title_login">Login Module</string>
 </resources>
