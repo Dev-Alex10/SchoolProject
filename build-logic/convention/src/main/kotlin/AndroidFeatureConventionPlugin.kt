@@ -15,7 +15,6 @@
  */
 
 import com.android.build.api.dsl.LibraryExtension
-import my.schoolProject.configureGradleManagedDevices
 import my.schoolProject.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -32,15 +31,12 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 testOptions.animationsDisabled = true
-                configureGradleManagedDevices(this)
             }
 
             dependencies {
 //                "implementation"(project(":core:ui"))
 
-                "implementation"(libs.findLibrary("androidx.hilt.navigation.compose").get())
-                "implementation"(libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
-                "implementation"(libs.findLibrary("androidx.navigation.compose").get())
+
 //                "implementation"(libs.findLibrary("kotlinx.serialization.json").get())
 
                 "testImplementation"(libs.findLibrary("androidx.navigation.testing").get())
