@@ -15,7 +15,6 @@
  */
 
 import com.android.build.api.dsl.LibraryExtension
-import my.schoolProject.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -36,13 +35,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             dependencies {
 //                "implementation"(project(":core:ui"))
 
-
-//                "implementation"(libs.findLibrary("kotlinx.serialization.json").get())
-
-                "testImplementation"(libs.findLibrary("androidx.navigation.testing").get())
-                "androidTestImplementation"(
-                    libs.findLibrary("androidx.lifecycle.runtimeTesting").get(),
-                )
             }
         }
     }

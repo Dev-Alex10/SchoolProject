@@ -20,8 +20,9 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") // So we can use modules in gradle e.g:projects.feature
 rootProject.name = "SchoolProject"
 include(":app")
-include(":feature:auth:auth_domain")
-include(":feature:auth:auth_data")
-include(":feature:auth:auth_presentation")
+include(":feature:auth:domain")
+include(":feature:auth:data")
+include(":feature:auth:presentation")
