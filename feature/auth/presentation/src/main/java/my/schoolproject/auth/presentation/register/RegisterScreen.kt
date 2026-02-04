@@ -37,10 +37,10 @@ fun RegisterScreen(
         ) {
             UserInput(
                 onAuthClick = registerViewModel::register,
-                buttonText = "Register",
+                buttonText = stringResource(R.string.feature_auth_presentation_register),
                 canSubmit = state.canRegister,
                 state = state,
-                optionalContent = { outlinedTextFieldModifier ->
+                confirmPasswordTextField = { outlinedTextFieldModifier ->
                     val isError =
                         !state.isConfirmPasswordValid && state.confirmPasswordTextState.text.isNotEmpty()
 

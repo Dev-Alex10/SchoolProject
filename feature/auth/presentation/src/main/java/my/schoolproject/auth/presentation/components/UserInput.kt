@@ -29,16 +29,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import my.schoolproject.auth.presentation.AuthTextFieldsState
 import my.schoolproject.auth.presentation.R
-import my.schoolproject.auth.presentation.register.RegisterState
 
 @Composable
 fun UserInput(
     onAuthClick: () -> Unit,
     buttonText: String,
-    state: RegisterState,
+    state: AuthTextFieldsState,
     canSubmit: Boolean,
-    optionalContent: @Composable ((Modifier) -> Unit) = {}
+    confirmPasswordTextField: @Composable ((Modifier) -> Unit) = {}
 ) {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val coroutineScope = rememberCoroutineScope()
@@ -90,7 +90,7 @@ fun UserInput(
                 }
             }
         )
-        optionalContent(outlineTextFieldModifier)
+        confirmPasswordTextField(outlineTextFieldModifier)
     }
     Button(
         onClick = onAuthClick,

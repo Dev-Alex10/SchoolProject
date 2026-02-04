@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import my.schoolproject.auth.presentation.R
 import my.schoolproject.auth.presentation.components.UserInput
 
@@ -30,18 +32,25 @@ fun LoginScreen(
     onLoginClick: () -> Unit,
     onRegisterClick: () -> Unit
 ) {
-    Scaffold {padding ->
+    val state by loginViewModel.state.collectAsStateWithLifecycle()
+    Scaffold { padding ->
         Column(
-            modifier = modifier.verticalScroll(rememberScrollState()).padding(padding),
+            modifier = modifier
+                .verticalScroll(rememberScrollState())
+                .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-//            UserInput(
-//                onAuthClick = loginViewModel::login,
-//                buttonText = stringResource(R.string.feature_auth_presentation_login),
-//                state = loginViewModel,
-//                canSubmit = loginViewModel.areCredentialsValid()
-//            )
+            UserInput(
+                onAuthClick = {
+                    loginViewModel.login()
+                    //TODO Do this only if login is successful
+                    onLoginClick()
+                },
+                buttonText = stringResource(R.string.feature_auth_presentation_login),
+                state = state,
+                canSubmit = state.canLogin
+            )
             Spacer(modifier = Modifier.height(32.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,

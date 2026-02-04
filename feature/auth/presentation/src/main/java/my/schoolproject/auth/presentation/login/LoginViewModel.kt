@@ -1,42 +1,29 @@
 package my.schoolproject.auth.presentation.login
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
-import my.schoolproject.auth.presentation.validation.EmailValidator
-import my.schoolproject.auth.presentation.validation.PasswordValidator
+import my.schoolproject.auth.presentation.AuthViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
-    private val _email: MutableStateFlow<String> = MutableStateFlow("")
-    val email: StateFlow<String> = _email.asStateFlow()
+class LoginViewModel @Inject constructor() : AuthViewModel<LoginState>(LoginState()) {
 
-    private val _password: MutableStateFlow<String> = MutableStateFlow("")
-    val password: StateFlow<String> = _password.asStateFlow()
+    override fun observeValidationStates() {
+        combine(
+            isEmailValidFlow,
+            isPasswordValidFlow
+        ) { isEmailValid, isPasswordValid ->
+            val allValid = isEmailValid && isPasswordValid
 
-    fun onEmailTextChange(email: String) {
-        _email.value = email
-    }
-
-    fun onPasswordTextChange(password: String) {
-        _password.value = password
-    }
-
-    fun isEmailValid(): Boolean {
-        return EmailValidator.validate(_email.value)
-    }
-
-    fun isPasswordValid(): Boolean {
-        return PasswordValidator.validate(_password.value)
-    }
-
-    fun areCredentialsValid(): Boolean {
-        return isEmailValid() && isPasswordValid()
+            _state.value = _state.value.copy(
+                canLogin = allValid,
+                isEmailValid = isEmailValid,
+                isPasswordValid = isPasswordValid,
+            )
+        }.launchIn(viewModelScope)
     }
 
     fun logout() {
@@ -46,11 +33,5 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     }
 
     fun login() {
-        clearState()
-    }
-
-    private fun clearState() {
-        _email.value = ""
-        _password.value = ""
     }
 }
