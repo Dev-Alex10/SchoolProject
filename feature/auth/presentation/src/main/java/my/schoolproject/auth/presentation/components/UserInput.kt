@@ -12,11 +12,12 @@ import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedSecureTextField
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -26,27 +27,19 @@ import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import my.schoolproject.auth.presentation.R
-import my.schoolproject.auth.presentation.register.RegisterViewModel
+import my.schoolproject.auth.presentation.register.RegisterState
 
 @Composable
 fun UserInput(
-    onAuthClick: (String, String) -> Unit,
+    onAuthClick: () -> Unit,
     buttonText: String,
-//    sharedAuthViewModel: SharedAuthViewModel,
-    registerViewModel: RegisterViewModel,
-    canSubmit: () -> Boolean,
+    state: RegisterState,
+    canSubmit: Boolean,
     optionalContent: @Composable ((Modifier) -> Unit) = {}
 ) {
-    val email by registerViewModel.email.collectAsStateWithLifecycle()
-    val password by registerViewModel.password.collectAsStateWithLifecycle()
-
-    val isPasswordInvalid = password.isNotEmpty() && !registerViewModel.isPasswordValid()
-
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val coroutineScope = rememberCoroutineScope()
     val outlineTextFieldModifier = Modifier
@@ -67,13 +60,6 @@ fun UserInput(
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(size = 24.dp))
     )
-//    Image(
-//        painter = painterResource(R.drawable.feature_auth_presentation_computer_image),
-//        contentDescription = stringResource(R.string.feature_auth_presentation_logo),
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .clip(RoundedCornerShape(size = 24.dp)),
-//    )
     Spacer(modifier = Modifier.height(32.dp))
     Column(
         modifier = Modifier
@@ -83,26 +69,23 @@ fun UserInput(
         verticalArrangement = Arrangement.Center
     ) {
         OutlinedTextField(
-            value = email,
-            onValueChange = registerViewModel::onEmailTextChange,
-            singleLine = true,
+            state = state.emailTextState,
+            lineLimits = TextFieldLineLimits.SingleLine,
             modifier = outlineTextFieldModifier,
             label = { Text(stringResource(R.string.feature_auth_presentation_email)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            isError = !registerViewModel.isEmailValid() && email.isNotEmpty(),
+            isError = !state.isEmailValid && state.emailTextState.text.isNotEmpty(),
             supportingText = {}
         )
-        OutlinedTextField(
-            value = password,
-            onValueChange = registerViewModel::onPasswordTextChange,
-            singleLine = true,
+        val isError = !state.isPasswordValid && state.passwordTextState.text.isNotEmpty()
+        OutlinedSecureTextField(
+            state = state.passwordTextState,
             modifier = outlineTextFieldModifier,
             label = { Text(stringResource(R.string.feature_auth_presentation_password)) },
-            visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            isError = isPasswordInvalid,
+            isError = isError,
             supportingText = {
-                if (isPasswordInvalid) {
+                if (isError) {
                     Text(text = stringResource(R.string.feature_auth_presentation_password_error))
                 }
             }
@@ -110,12 +93,12 @@ fun UserInput(
         optionalContent(outlineTextFieldModifier)
     }
     Button(
-        onClick = { onAuthClick(email, password) },
+        onClick = onAuthClick,
         modifier = Modifier
             .fillMaxWidth(0.5f)
             .heightIn(24.dp, 48.dp)
             .bringIntoViewRequester(bringIntoViewRequester),
-        enabled = canSubmit()
+        enabled = canSubmit
     ) {
         Text(buttonText)
     }

@@ -7,5 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.auth.domain)
+
     implementation(libs.compose.ui)
 }

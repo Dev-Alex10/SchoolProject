@@ -1,7 +1,6 @@
-package my.schoolproject.auth.presentation
+package my.schoolproject.auth.presentation.validation
 
-object AuthPresentationConstants {
-    const val EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\\.[A-Za-z0-9.-]+\$"
+object PasswordValidator {
 
     /**
      * - `^`                        - Start of values anchor.
@@ -12,6 +11,10 @@ object AuthPresentationConstants {
      * - `[A-Za-z\\d@$!%*?&]{8,}`   - The password must contain 8 or more characters from the allowed set.
      * - `$                         - End of values anchor.
      **/
-    const val PASSWORD_REGEX =
+    const val PASSWORD_PATTERN =
         "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}\$"
+
+    fun validate(password: String): Boolean {
+        return PASSWORD_PATTERN.toRegex().matches(password)
+    }
 }
