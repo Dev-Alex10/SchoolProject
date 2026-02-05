@@ -38,19 +38,12 @@ fun UserInput(
     buttonText: String,
     state: AuthTextFieldsState,
     canSubmit: Boolean,
-    confirmPasswordTextField: @Composable ((Modifier) -> Unit) = {}
+    confirmPasswordTextField: @Composable ((Modifier) -> Unit)? = null
 ) {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val coroutineScope = rememberCoroutineScope()
     val outlineTextFieldModifier = Modifier
         .fillMaxWidth()
-        .onFocusEvent { focusState ->
-            if (focusState.isFocused) {
-                coroutineScope.launch {
-                    bringIntoViewRequester.bringIntoView()
-                }
-            }
-        }
 
     Image(
         painter = painterResource(R.drawable.feature_auth_presentation_computer_image),
@@ -78,9 +71,20 @@ fun UserInput(
             supportingText = {}
         )
         val isError = !state.isPasswordValid && state.passwordTextState.text.isNotEmpty()
+        val passwordModifier =  if (confirmPasswordTextField == null) {
+            outlineTextFieldModifier.onFocusEvent { focusState ->
+                if (focusState.isFocused) {
+                    coroutineScope.launch {
+                        bringIntoViewRequester.bringIntoView()
+                    }
+                }
+            }
+        } else {
+            outlineTextFieldModifier
+        }
         OutlinedSecureTextField(
             state = state.passwordTextState,
-            modifier = outlineTextFieldModifier,
+            modifier = passwordModifier,
             label = { Text(stringResource(R.string.feature_auth_presentation_password)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             isError = isError,
@@ -90,7 +94,15 @@ fun UserInput(
                 }
             }
         )
-        confirmPasswordTextField(outlineTextFieldModifier)
+        confirmPasswordTextField?.invoke(
+            outlineTextFieldModifier
+                .onFocusEvent { focusState ->
+                    if (focusState.isFocused) {
+                        coroutineScope.launch {
+                            bringIntoViewRequester.bringIntoView()
+                        }
+                    }
+                })
     }
     Button(
         onClick = onAuthClick,

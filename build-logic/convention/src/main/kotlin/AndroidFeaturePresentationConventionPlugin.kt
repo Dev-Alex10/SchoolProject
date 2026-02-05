@@ -19,10 +19,10 @@ class AndroidFeaturePresentationConventionPlugin : Plugin<Project> {
             dependencies {
                 "implementation"(libs.findLibrary("hilt-navigation-compose").get())
 
-                "testImplementation"(libs.findLibrary("navigation.testing").get())
+                "testImplementation"(libs.findLibrary("navigation-testing").get())
 
                 "androidTestImplementation"(
-                    libs.findLibrary("lifecycle.runtimeTesting").get(),
+                    libs.findLibrary("lifecycle-runtimeTesting").get(),
                 )
             }
         }

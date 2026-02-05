@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="feature_auth_presentation_top_bar_title">Android is fun!</string>
     <string name="feature_auth_presentation_register">Register</string>
     <string name="feature_auth_presentation_login">Login</string>
     <string name="feature_auth_presentation_logout">Logout</string>
