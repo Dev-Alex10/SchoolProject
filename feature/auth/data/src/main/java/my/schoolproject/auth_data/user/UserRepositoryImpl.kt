@@ -1,7 +1,7 @@
 package my.schoolproject.auth_data.user
 
-import my.schoolproject.auth_domain.model.User
-import my.schoolproject.auth_domain.user.UserRepository
+import my.schoolproject.domain.model.User
+import my.schoolproject.domain.user.UserRepository
 import my.schoolproject.feature.auth.database.dao.UserDao
 import my.schoolproject.feature.auth.database.entity.toDatabaseEntity
 import my.schoolproject.feature.auth.database.entity.toDomain

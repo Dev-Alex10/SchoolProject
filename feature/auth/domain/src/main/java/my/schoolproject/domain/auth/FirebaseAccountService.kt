@@ -1,15 +1,14 @@
-package my.schoolproject.auth_domain.auth
+package my.schoolproject.domain.auth
 
-import my.schoolproject.auth_domain.model.User
 import my.schoolproject.core.domain.DataError
 import my.schoolproject.core.domain.EmptyResult
 import my.schoolproject.core.domain.Result
+import my.schoolproject.domain.model.User
 
 interface FirebaseAccountService {
     fun hasUser(): Boolean
     fun getUser(): Result<User, DataError.Remote>
     suspend fun login(email: String, password: String): Result<User, DataError.Remote>
-    suspend fun sendRecoveryEmail(email: String): EmptyResult<DataError.Remote>
     suspend fun forgotPassword(email: String): EmptyResult<DataError.Remote>
     suspend fun register(email: String, password: String): Result<User, DataError.Remote>
 

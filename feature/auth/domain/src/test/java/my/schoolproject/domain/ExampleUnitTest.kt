@@ -1,4 +1,4 @@
-package my.schoolproject.auth_domain
+package my.schoolproject.domain
 
 import org.junit.Test
 

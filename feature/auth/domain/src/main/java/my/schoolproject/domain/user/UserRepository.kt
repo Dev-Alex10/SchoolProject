@@ -1,6 +1,6 @@
-package my.schoolproject.auth_domain.user
+package my.schoolproject.domain.user
 
-import my.schoolproject.auth_domain.model.User
+import my.schoolproject.domain.model.User
 
 interface UserRepository {
     suspend fun getUserByEmail(email: String): User?

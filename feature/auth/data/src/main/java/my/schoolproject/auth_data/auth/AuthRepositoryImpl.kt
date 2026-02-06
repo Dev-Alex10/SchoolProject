@@ -1,12 +1,12 @@
 package my.schoolproject.auth_data.auth
 
-import my.schoolproject.auth_domain.auth.AuthRepository
-import my.schoolproject.auth_domain.auth.FirebaseAccountService
-import my.schoolproject.auth_domain.user.UserRepository
 import my.schoolproject.core.domain.DataError
 import my.schoolproject.core.domain.EmptyResult
 import my.schoolproject.core.domain.asEmptyResult
 import my.schoolproject.core.domain.onSuccess
+import my.schoolproject.domain.auth.AuthRepository
+import my.schoolproject.domain.auth.FirebaseAccountService
+import my.schoolproject.domain.user.UserRepository
 import javax.inject.Inject
 
 internal class AuthRepositoryImpl @Inject constructor(

@@ -3,7 +3,7 @@ package my.schoolproject.feature.auth.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import my.schoolproject.auth_domain.model.User
+import my.schoolproject.domain.model.User
 
 @Entity(tableName = "User")
 data class UserEntity(

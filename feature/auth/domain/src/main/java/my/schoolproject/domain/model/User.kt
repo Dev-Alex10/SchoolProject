@@ -1,4 +1,4 @@
-package my.schoolproject.auth_domain.model
+package my.schoolproject.domain.model
 
 data class User(
     val name: String,

@@ -9,12 +9,12 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.tasks.await
-import my.schoolproject.auth_domain.auth.FirebaseAccountService
-import my.schoolproject.auth_domain.model.User
 import my.schoolproject.core.domain.DataError
 import my.schoolproject.core.domain.EmptyResult
 import my.schoolproject.core.domain.Result
 import my.schoolproject.core.domain.asEmptyResult
+import my.schoolproject.domain.auth.FirebaseAccountService
+import my.schoolproject.domain.model.User
 import javax.inject.Inject
 
 internal class FirebaseAccountServiceImpl @Inject constructor() : FirebaseAccountService {
@@ -36,14 +36,6 @@ internal class FirebaseAccountServiceImpl @Inject constructor() : FirebaseAccoun
             val user = firebaseUser.user
                 ?: return@runAuthTaskSafely Result.Failure(DataError.Remote.NOT_FOUND)
             Result.Success(user.toDomain())
-        }
-    }
-
-    override suspend fun sendRecoveryEmail(email: String): EmptyResult<DataError.Remote> {
-        val task = auth.sendPasswordResetEmail(email)
-        return runAuthTaskSafely {
-            task.await()
-            Result.Success(Unit).asEmptyResult()
         }
     }
 

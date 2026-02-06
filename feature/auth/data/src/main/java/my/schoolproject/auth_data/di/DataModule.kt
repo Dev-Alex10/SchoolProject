@@ -7,9 +7,9 @@ import dagger.hilt.components.SingletonComponent
 import my.schoolproject.auth_data.auth.AuthRepositoryImpl
 import my.schoolproject.auth_data.auth.FirebaseAccountServiceImpl
 import my.schoolproject.auth_data.user.OfflineUserRepository
-import my.schoolproject.auth_domain.auth.AuthRepository
-import my.schoolproject.auth_domain.auth.FirebaseAccountService
-import my.schoolproject.auth_domain.user.UserRepository
+import my.schoolproject.domain.auth.AuthRepository
+import my.schoolproject.domain.auth.FirebaseAccountService
+import my.schoolproject.domain.user.UserRepository
 
 @Module
 @InstallIn(SingletonComponent::class)

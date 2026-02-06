@@ -1,4 +1,4 @@
-package my.schoolproject.auth_domain
+package my.schoolproject.domain
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

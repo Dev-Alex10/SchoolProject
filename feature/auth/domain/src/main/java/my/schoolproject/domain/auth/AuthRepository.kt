@@ -1,4 +1,4 @@
-package my.schoolproject.auth_domain.auth
+package my.schoolproject.domain.auth
 
 import my.schoolproject.core.domain.DataError
 import my.schoolproject.core.domain.EmptyResult
