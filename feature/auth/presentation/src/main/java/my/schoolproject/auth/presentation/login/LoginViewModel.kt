@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import my.schoolproject.auth.domain.AuthRepository
 import my.schoolproject.auth.presentation.AuthViewModel
 import my.schoolproject.core.domain.DataError
 import my.schoolproject.core.domain.onFailure
 import my.schoolproject.core.domain.onSuccess
-import my.schoolproject.domain.auth.AuthRepository
 import javax.inject.Inject
 
 @HiltViewModel

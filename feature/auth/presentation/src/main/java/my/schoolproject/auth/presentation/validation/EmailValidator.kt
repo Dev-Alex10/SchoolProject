@@ -1,9 +1,9 @@
 package my.schoolproject.auth.presentation.validation
 
-object EmailValidator {
-    const val EMAIL_PATTERN = "^(?!.*\\.\\.)[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\\.[A-Za-z0-9.-]+$"
+import android.util.Patterns
 
+object EmailValidator {
     fun validate(email: String): Boolean {
-        return EMAIL_PATTERN.toRegex().matches(email)
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 }
