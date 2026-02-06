@@ -9,9 +9,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedSecureTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,17 +26,35 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import my.schoolproject.auth.presentation.R
 import my.schoolproject.auth.presentation.components.AuthTopAppBar
 import my.schoolproject.auth.presentation.components.UserInput
+import my.schoolproject.core.presentation.util.ObserveAsEvents
 
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    registerViewModel: RegisterViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    viewModel: RegisterViewModel = hiltViewModel(),
+    onBackClick: () -> Unit,
+    onSuccessfulRegister: () -> Unit
 ) {
-    val state by registerViewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarState = remember { SnackbarHostState() }
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            is RegisterEvent.OnError -> snackbarState.showSnackbar(event.error)
+            RegisterEvent.OnSuccess -> onSuccessfulRegister()
+        }
+    }
     Scaffold(
         modifier = modifier.imePadding(),
-        topBar = { AuthTopAppBar(modifier = Modifier.padding(8.dp), onBackClick = onBackClick) }
+        topBar = {
+            AuthTopAppBar(
+                modifier = Modifier.padding(8.dp),
+                onBackClick = onBackClick
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarState)
+        }
     ) { padding ->
         Column(
             modifier = modifier
@@ -43,7 +64,7 @@ fun RegisterScreen(
             verticalArrangement = Arrangement.Center
         ) {
             UserInput(
-                onAuthClick = registerViewModel::register,
+                onAuthClick = viewModel::register,
                 buttonText = stringResource(R.string.feature_auth_presentation_register),
                 canSubmit = state.canRegister,
                 state = state,
@@ -72,5 +93,8 @@ fun RegisterScreen(
 @PreviewLightDark
 @Composable
 fun RegisterScreenPreview() {
-    RegisterScreen(onBackClick = {})
+    RegisterScreen(
+        onBackClick = {},
+        onSuccessfulRegister = {}
+    )
 }

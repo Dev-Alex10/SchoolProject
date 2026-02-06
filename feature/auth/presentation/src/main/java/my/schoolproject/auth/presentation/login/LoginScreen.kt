@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,18 +29,31 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import my.schoolproject.auth.presentation.R
 import my.schoolproject.auth.presentation.components.AuthTopAppBar
 import my.schoolproject.auth.presentation.components.UserInput
+import my.schoolproject.core.presentation.util.ObserveAsEvents
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    loginViewModel: LoginViewModel = hiltViewModel(),
-    onLoginClick: () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel(),
+    onSuccessfulLogin: () -> Unit,
     onRegisterClick: () -> Unit
 ) {
-    val state by loginViewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarState = remember { SnackbarHostState() }
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            is LoginEvent.OnError -> snackbarState.showSnackbar(event.error)
+            LoginEvent.OnSuccess -> onSuccessfulLogin()
+        }
+    }
+
     Scaffold(
         modifier = modifier.imePadding(),
-        topBar = { AuthTopAppBar() }
+        topBar = { AuthTopAppBar() },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarState)
+        }
     ) { padding ->
         Column(
             modifier = modifier
@@ -47,11 +63,7 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ) {
             UserInput(
-                onAuthClick = {
-                    loginViewModel.login()
-                    //TODO Do this only if login is successful
-                    onLoginClick()
-                },
+                onAuthClick = viewModel::login,
                 buttonText = stringResource(R.string.feature_auth_presentation_login),
                 state = state,
                 canSubmit = state.canLogin

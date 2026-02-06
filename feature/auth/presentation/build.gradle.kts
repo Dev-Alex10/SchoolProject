@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.myschoolproject.android.feat.presentation)
+    alias(libs.plugins.myschoolproject.feat.presentation)
 }
 
 android {
@@ -8,6 +8,4 @@ android {
 
 dependencies {
     implementation(projects.feature.auth.domain)
-
-    implementation(libs.compose.ui)
 }

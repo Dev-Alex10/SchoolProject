@@ -9,14 +9,14 @@ import my.schoolproject.auth.presentation.register.RegisterScreen
 
 fun NavGraphBuilder.authGraph(
     navController: NavController,
-    onLoginSuccess: () -> Unit,
+    onSuccess: () -> Unit,
 ) {
     navigation<AuthGraphRoutes.Graph>(
         startDestination = AuthGraphRoutes.Login,
     ) {
         composable<AuthGraphRoutes.Login> {
             LoginScreen(
-                onLoginClick = onLoginSuccess,
+                onSuccessfulLogin = onSuccess,
                 onRegisterClick = {
                     navController.navigate(AuthGraphRoutes.Register)
                 }
@@ -24,7 +24,10 @@ fun NavGraphBuilder.authGraph(
         }
 
         composable<AuthGraphRoutes.Register> {
-            RegisterScreen(onBackClick = { navController.popBackStack() })
+            RegisterScreen(
+                onBackClick = { navController.popBackStack() },
+                onSuccessfulRegister = onSuccess
+            )
         }
     }
 }

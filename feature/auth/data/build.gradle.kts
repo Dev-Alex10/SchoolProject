@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.myschoolproject.android.feature)
+    alias(libs.plugins.myschoolproject.feature)
 }
 
 android {
@@ -8,9 +8,8 @@ android {
 
 dependencies {
     implementation(projects.feature.auth.domain)
+    implementation(projects.feature.auth.database)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
-    implementation(libs.room)
-    implementation(libs.room.coroutines)
 }

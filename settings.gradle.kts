@@ -25,4 +25,8 @@ rootProject.name = "SchoolProject"
 include(":app")
 include(":feature:auth:domain")
 include(":feature:auth:data")
+include(":feature:auth:database")
 include(":feature:auth:presentation")
+include(":core:domain")
+include(":core:presentation")
+include(":feature:dashboard:presentation")

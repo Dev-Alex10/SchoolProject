@@ -24,7 +24,7 @@ import org.gradle.kotlin.dsl.dependencies
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = "myschoolproject.android.library")
+            apply(plugin = "myschoolproject.library")
             apply(plugin = "myschoolproject.hilt")
             apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
@@ -33,8 +33,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-//                "implementation"(project(":core:ui"))
-
+                "implementation"(project(":core:domain"))
             }
         }
     }

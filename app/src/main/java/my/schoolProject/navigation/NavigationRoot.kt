@@ -5,6 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import my.schoolproject.auth.presentation.navigation.AuthGraphRoutes
 import my.schoolproject.auth.presentation.navigation.authGraph
+import my.schoolproject.dashboard.presentation.navigation.DashboardGraphRoutes
+import my.schoolproject.dashboard.presentation.navigation.dashboardGraph
 
 @Composable
 fun NavigationRoot(
@@ -13,14 +15,19 @@ fun NavigationRoot(
 ) {
     NavHost(
         navController = navController,
-        startDestination = startDestination
-    ) {
-        authGraph(navController) {
-//            navController.navigate(LessonGraphRoutes.Graph) {
-//                popUpTo(AuthGraphRoutes.Graph) {
-//                    inclusive = true
-//                }
-//            }
+        startDestination = startDestination,
+        builder = {
+            authGraph(
+                navController,
+                onSuccess = {
+                    navController.navigate(DashboardGraphRoutes.Graph) {
+                        popUpTo(AuthGraphRoutes.Graph) {
+                            inclusive = true
+                        }
+                    }
+                },
+            )
+            dashboardGraph(navController)
         }
-    }
+    )
 }
