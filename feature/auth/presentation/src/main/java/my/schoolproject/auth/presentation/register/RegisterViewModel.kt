@@ -7,7 +7,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import my.schoolproject.auth.presentation.AuthViewModel
@@ -26,11 +25,12 @@ class RegisterViewModel @Inject constructor(
 
 
     private val isConfirmPasswordValidFlow =
-        snapshotFlow { state.value.confirmPasswordTextState.text.toString() }
-            .map { confirmPassword ->
-                confirmPassword == state.value.passwordTextState.text.toString() && confirmPassword.isNotEmpty()
-            }
-            .distinctUntilChanged()
+        combine(
+            snapshotFlow { state.value.passwordTextState.text.toString() },
+            snapshotFlow { state.value.confirmPasswordTextState.text.toString() }
+        ) { password, confirmPassword ->
+            password == confirmPassword && confirmPassword.isNotEmpty()
+        }.distinctUntilChanged()
 
 
     override fun observeValidationStates() {
@@ -60,7 +60,7 @@ class RegisterViewModel @Inject constructor(
             }.onFailure {
                 if (it == DataError.Remote.CONFLICT) {
                     eventChannel.send(RegisterEvent.OnError("User with this email already exists"))
-                }else{
+                } else {
                     eventChannel.send(RegisterEvent.OnError(it.toString()))
                 }
             }

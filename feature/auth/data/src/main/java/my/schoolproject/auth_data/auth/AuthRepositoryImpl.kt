@@ -26,12 +26,16 @@ internal class AuthRepositoryImpl @Inject constructor(
     override suspend fun register(email: String, password: String): EmptyResult<DataError> {
         val result = firebaseAccountService.register(email, password)
         return result.onSuccess {
-            userRepository.insert(it)
+            val user = userRepository.getUserByEmail(email)
+            if (user == null) {
+                userRepository.insert(it)
+            }
         }.asEmptyResult()
     }
 
     override suspend fun logout() {
-      firebaseAccountService.logout()
+        firebaseAccountService.logout()
+        userRepository.deleteAllUsers()
     }
 
 }
