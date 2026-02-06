@@ -7,7 +7,7 @@ import my.schoolproject.auth.database.dao.UserDao
 import my.schoolproject.auth.database.entity.UserEntity
 
 @Database(
-    entities = [UserEntity::class], version = 1,
+    entities = [UserEntity::class], version = 2,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
     ],
