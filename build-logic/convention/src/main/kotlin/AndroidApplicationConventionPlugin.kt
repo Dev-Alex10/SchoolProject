@@ -12,6 +12,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "com.android.application")
             apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+            apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
             extensions.configure<ApplicationExtension> {
                 namespace = "my.schoolProject"

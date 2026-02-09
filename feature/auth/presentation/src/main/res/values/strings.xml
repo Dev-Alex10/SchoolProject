@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_auth_presentation_top_bar_title">Android is fun!</string>
+    <string name="feature_auth_presentation_register">Register</string>
+    <string name="feature_auth_presentation_login">Login</string>
+    <string name="feature_auth_presentation_logout">Logout</string>
+    <string name="feature_auth_presentation_do_not_have_account">Don\'t have an account?</string>
+    <string name="feature_auth_presentation_back">Back</string>
+    <string name="feature_auth_presentation_logo">Logo</string>
+    <string name="feature_auth_presentation_email">Email</string>
+    <string name="feature_auth_presentation_password">Password</string>
+    <string name="feature_auth_presentation_confirm_password">Confirm password</string>
+    <string name="feature_auth_presentation_password_error">Password must have at least 8 characters with one lowercase letter, uppercase letter, digit, and one special character </string>
+    <string name="feature_auth_presentation_confirm_password_error">The passwords do not match </string>
+</resources>

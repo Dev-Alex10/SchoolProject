@@ -25,7 +25,7 @@ import org.gradle.kotlin.dsl.dependencies
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = "myschoolproject.android.library")
+            apply(plugin = "myschoolproject.library")
             apply(plugin = "myschoolproject.hilt")
             apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
@@ -34,14 +34,14 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-//                "implementation"(project(":core:ui"))
+                "implementation"(project(":core:domain"))
 
+                "testImplementation"(libs.findLibrary("kotlin.test").get())
+                "testImplementation"(libs.findLibrary("junit").get())
 
-//                "implementation"(libs.findLibrary("kotlinx.serialization.json").get())
-
-                "testImplementation"(libs.findLibrary("androidx.navigation.testing").get())
+                "androidTestImplementation"(libs.findLibrary("kotlin.test").get())
                 "androidTestImplementation"(
-                    libs.findLibrary("androidx.lifecycle.runtimeTesting").get(),
+                    libs.findLibrary("lifecycle-runtimeTesting").get(),
                 )
             }
         }

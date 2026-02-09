@@ -11,14 +11,14 @@ class HiltConventionPlugin : Plugin<Project> {
             apply(plugin = "com.google.devtools.ksp")
 
             dependencies {
-                "ksp"(libs.findLibrary("hilt.compiler").get())
+                "ksp"(libs.findLibrary("hilt-compiler").get())
             }
 
             /** Add support for Android modules, based on [AndroidBasePlugin] */
             pluginManager.withPlugin("com.android.base") {
                 apply(plugin = "dagger.hilt.android.plugin")
                 dependencies {
-                    "implementation"(libs.findLibrary("hilt.android").get())
+                    "implementation"(libs.findLibrary("hilt-android").get())
                 }
             }
         }

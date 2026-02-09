@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.myschoolproject.android.application)
+    alias(libs.plugins.myschoolproject.application)
     alias(libs.plugins.myschoolproject.hilt)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -12,7 +13,6 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix = ".Debug"
         }
         release {
             isMinifyEnabled = false
@@ -25,13 +25,20 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.auth.presentation)
+    implementation(projects.feature.auth.data)
+    implementation(projects.feature.dashboard.presentation)
+
+    implementation(libs.navigation.compose)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest)
 }

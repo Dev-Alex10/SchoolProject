@@ -16,30 +16,34 @@ kotlin {
 dependencies{
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.android.gradleApiPlugin)
-//    compileOnly(libs.android.tools.common)
+    compileOnly(libs.room.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
 }
 gradlePlugin{
     plugins{
         register("androidApplication") {
-            id = libs.plugins.myschoolproject.android.application.get().pluginId
+            id = libs.plugins.myschoolproject.application.get().pluginId
             implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
-            id = libs.plugins.myschoolproject.android.library.get().pluginId
+            id = libs.plugins.myschoolproject.library.get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidFeature") {
-            id = libs.plugins.myschoolproject.android.feature.get().pluginId
+            id = libs.plugins.myschoolproject.feature.get().pluginId
             implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("androidFeaturePresentation") {
-            id = libs.plugins.myschoolproject.android.feat.presentation.get().pluginId
+            id = libs.plugins.myschoolproject.feat.presentation.get().pluginId
             implementationClass = "AndroidFeaturePresentationConventionPlugin"
         }
         register("hilt") {
             id = libs.plugins.myschoolproject.hilt.get().pluginId
             implementationClass = "HiltConventionPlugin"
+        }
+        register("room") {
+            id = libs.plugins.myschoolproject.room.get().pluginId
+            implementationClass = "RoomConventionPlugin"
         }
     }
 }
