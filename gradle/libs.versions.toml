@@ -67,8 +67,9 @@ room = { id = "androidx.room", version.ref = "room" }
 
 # Plugins defined by this project
 myschoolproject-application = { id = "myschoolproject.application" }
-myschoolproject-feat-presentation = { id = "myschoolproject.feat.presentation" }
+myschoolproject-feature-presentation = { id = "myschoolproject.feature.presentation" }
 myschoolproject-feature = { id = "myschoolproject.feature" }
 myschoolproject-library = { id = "myschoolproject.library" }
+myschoolproject-library-compose = { id = "myschoolproject.library.compose" }
 myschoolproject-hilt = { id = "myschoolproject.hilt" }
 myschoolproject-room = { id = "myschoolproject.room" }

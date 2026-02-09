@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.myschoolproject.feat.presentation)
+    alias(libs.plugins.myschoolproject.feature.presentation)
 }
 
 android {

@@ -26,15 +26,19 @@ gradlePlugin{
             implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
-            id = libs.plugins.myschoolproject.library.get().pluginId
+            id = libs.plugins.myschoolproject.library.asProvider().get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
+        register("androidLibraryCompose") {
+            id = libs.plugins.myschoolproject.library.compose.get().pluginId
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
         register("androidFeature") {
-            id = libs.plugins.myschoolproject.feature.get().pluginId
+            id = libs.plugins.myschoolproject.feature.asProvider().get().pluginId
             implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("androidFeaturePresentation") {
-            id = libs.plugins.myschoolproject.feat.presentation.get().pluginId
+            id = libs.plugins.myschoolproject.feature.presentation.get().pluginId
             implementationClass = "AndroidFeaturePresentationConventionPlugin"
         }
         register("hilt") {

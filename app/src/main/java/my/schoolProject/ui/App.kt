@@ -5,8 +5,8 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import my.schoolProject.navigation.NavigationRoot
-import my.schoolProject.ui.theme.MyApplicationTheme
 import my.schoolproject.auth.presentation.navigation.AuthGraphRoutes
+import my.schoolproject.core.designsystem.ui.theme.MyApplicationTheme
 import my.schoolproject.dashboard.presentation.navigation.DashboardGraphRoutes
 
 @Composable
