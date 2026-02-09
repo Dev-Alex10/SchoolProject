@@ -120,6 +120,6 @@ private fun FirebaseUser.toDomain(): User {
         uid = uid,
         name = displayName ?: "",
         email = email ?: "",
-        photoUrl = photoUrl?.toString() ?: ""
+        photoUrl = photoUrl?.toString()
     )
 }
