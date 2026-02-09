@@ -26,23 +26,23 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-firebase-auth = { group = "com.google.firebase", name = "firebase-auth"}
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
-room = { module = "androidx.room:room-runtime", name = "room", version.ref = "room"}
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-room-ktx = { module = "androidx.room:room-ktx", name = "room-coroutines", version.ref = "room"}
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 # Build logic dependencies
 android-gradleApiPlugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "androidGradlePlugin" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
