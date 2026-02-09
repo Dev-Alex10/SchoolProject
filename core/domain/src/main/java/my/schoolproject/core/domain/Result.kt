@@ -4,6 +4,12 @@ sealed interface Result<out D, out E: Error> {
     data class Success<out D>(val data: D): Result<D, Nothing>
     data class Failure<out E: Error>(val error: E): Result<Nothing, E>
 }
+// Use this if you do not want the error to be part of the result to be explicit in the fun signature
+// Simpler code, but less explicit
+//sealed class ResultTest<out R>{
+//    data class Success<out T>(val data: T) : ResultTest<T>()
+//    data class Failure(val error: Error) : ResultTest<Nothing>()
+//}
 
 inline fun <T, E: Error, R> Result<T, E>.map(map: (T) -> R): Result<R, E> {
     return when(this) {

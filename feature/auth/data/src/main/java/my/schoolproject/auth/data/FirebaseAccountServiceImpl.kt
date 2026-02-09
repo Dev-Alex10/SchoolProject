@@ -1,5 +1,6 @@
 package my.schoolproject.auth.data
 
+import android.util.Log
 import androidx.core.net.toUri
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -16,6 +17,8 @@ import my.schoolproject.core.domain.EmptyResult
 import my.schoolproject.core.domain.Result
 import my.schoolproject.core.domain.asEmptyResult
 import javax.inject.Inject
+
+private const val TAG = "FirebaseAccountService"
 
 internal class FirebaseAccountServiceImpl @Inject constructor() : FirebaseAccountService {
     private val auth = Firebase.auth
@@ -93,16 +96,20 @@ internal class FirebaseAccountServiceImpl @Inject constructor() : FirebaseAccoun
         auth.signOut()
     }
 
-    private suspend fun <T> runAuthTaskSafely(block: suspend () -> Result<T, DataError.Remote>): Result<T, DataError.Remote> {
+    private suspend fun <T> runAuthTaskSafely(authTask: suspend () -> Result<T, DataError.Remote>): Result<T, DataError.Remote> {
         return try {
-            block()
-        } catch (_: FirebaseAuthInvalidUserException) {
+            authTask()
+        } catch (exception: FirebaseAuthInvalidUserException) {
+            Log.e(TAG, "FirebaseAuthInvalidUserException ${exception.message}")
             Result.Failure(DataError.Remote.NOT_FOUND)
-        } catch (_: FirebaseAuthInvalidCredentialsException) {
+        } catch (exception: FirebaseAuthInvalidCredentialsException) {
+            Log.e(TAG, "FirebaseAuthInvalidCredentialsException ${exception.message}")
             Result.Failure(DataError.Remote.UNAUTHORIZED)
-        } catch (_: FirebaseAuthUserCollisionException) {
+        } catch (exception: FirebaseAuthUserCollisionException) {
+            Log.e(TAG, "FirebaseAuthUserCollisionException ${exception.message}")
             Result.Failure(DataError.Remote.CONFLICT)
-        } catch (_: Exception) {
+        } catch (exception: Exception) {
+            Log.e(TAG, "Unknown Exception ${exception.message}")
             Result.Failure(DataError.Remote.UNKNOWN)
         }
     }

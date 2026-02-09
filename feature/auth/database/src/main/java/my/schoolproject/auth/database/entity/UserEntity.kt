@@ -8,10 +8,10 @@ import my.schoolproject.auth.domain.user.User
 @Entity(tableName = "User")
 data class UserEntity(
     val name: String,
-    @PrimaryKey
     val email: String,
     @ColumnInfo(name = "photo_url")
     val photoUrl: String?,
+    @PrimaryKey
     val uid: String,
 )
 

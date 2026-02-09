@@ -27,7 +27,15 @@ fun NavigationRoot(
                     }
                 },
             )
-            dashboardGraph(navController)
+            dashboardGraph(
+                navController = navController,
+                onLogout = {
+                    navController.navigate(AuthGraphRoutes.Graph) {
+                        popUpTo(DashboardGraphRoutes.Graph) {
+                            inclusive = true
+                        }
+                    }
+                })
         }
     )
 }
