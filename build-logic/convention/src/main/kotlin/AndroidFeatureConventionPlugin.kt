@@ -15,6 +15,7 @@
  */
 
 import com.android.build.api.dsl.LibraryExtension
+import my.schoolProject.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -34,6 +35,14 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 
             dependencies {
                 "implementation"(project(":core:domain"))
+
+                "testImplementation"(libs.findLibrary("kotlin.test").get())
+                "testImplementation"(libs.findLibrary("junit").get())
+
+                "androidTestImplementation"(libs.findLibrary("kotlin.test").get())
+                "androidTestImplementation"(
+                    libs.findLibrary("lifecycle-runtimeTesting").get(),
+                )
             }
         }
     }

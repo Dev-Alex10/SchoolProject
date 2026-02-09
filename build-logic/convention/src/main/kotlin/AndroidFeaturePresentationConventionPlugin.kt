@@ -22,10 +22,6 @@ class AndroidFeaturePresentationConventionPlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("compose-ui").get())
 
                 "testImplementation"(libs.findLibrary("navigation-testing").get())
-
-                "androidTestImplementation"(
-                    libs.findLibrary("lifecycle-runtimeTesting").get(),
-                )
             }
         }
     }
