@@ -8,7 +8,7 @@ import my.schoolproject.core.domain.auth.AuthRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class DashBoardViewModel @Inject constructor(
+class DashboardViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 

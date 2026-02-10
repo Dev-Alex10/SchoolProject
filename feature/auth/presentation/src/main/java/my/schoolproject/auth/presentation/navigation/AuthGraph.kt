@@ -9,7 +9,7 @@ import my.schoolproject.auth.presentation.register.RegisterScreen
 
 fun NavGraphBuilder.authGraph(
     navController: NavController,
-    onSuccess: () -> Unit,
+    onSuccess: () -> Unit
 ) {
     navigation<AuthGraphRoutes.Graph>(
         startDestination = AuthGraphRoutes.Login,

@@ -33,7 +33,6 @@ import my.schoolproject.core.presentation.util.ObserveAsEvents
 
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
     onSuccessfulLogin: () -> Unit,
     onRegisterClick: () -> Unit
@@ -49,14 +48,14 @@ fun LoginScreen(
     }
 
     Scaffold(
-        modifier = modifier.imePadding(),
+        modifier = Modifier.imePadding(),
         topBar = { AuthTopAppBar() },
         snackbarHost = {
             SnackbarHost(hostState = snackbarState)
         }
     ) { padding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally,

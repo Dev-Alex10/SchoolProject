@@ -30,7 +30,6 @@ import my.schoolproject.core.presentation.util.ObserveAsEvents
 
 @Composable
 fun RegisterScreen(
-    modifier: Modifier = Modifier,
     viewModel: RegisterViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onSuccessfulRegister: () -> Unit
@@ -45,7 +44,7 @@ fun RegisterScreen(
         }
     }
     Scaffold(
-        modifier = modifier.imePadding(),
+        modifier = Modifier.imePadding(),
         topBar = {
             AuthTopAppBar(
                 modifier = Modifier.padding(8.dp),
@@ -57,7 +56,7 @@ fun RegisterScreen(
         }
     ) { padding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally,

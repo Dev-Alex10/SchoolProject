@@ -1,6 +1,7 @@
 package my.schoolProject.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import my.schoolproject.auth.presentation.navigation.AuthGraphRoutes
@@ -11,14 +12,15 @@ import my.schoolproject.dashboard.presentation.navigation.dashboardGraph
 @Composable
 fun NavigationRoot(
     navController: NavHostController,
-    startDestination: Any
+    startDestination: Any,
+    modifier: Modifier
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         builder = {
             authGraph(
-                navController,
+                navController = navController,
                 onSuccess = {
                     navController.navigate(DashboardGraphRoutes.Graph) {
                         popUpTo(AuthGraphRoutes.Graph) {
@@ -28,7 +30,7 @@ fun NavigationRoot(
                 },
             )
             dashboardGraph(
-                navController = navController,
+                modifier = modifier,
                 onLogout = {
                     navController.navigate(AuthGraphRoutes.Graph) {
                         popUpTo(DashboardGraphRoutes.Graph) {
