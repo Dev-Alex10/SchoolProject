@@ -4,31 +4,52 @@ package my.schoolproject.dashboard.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import my.schoolproject.core.designsystem.ui.theme.MyApplicationTheme
 import my.schoolproject.dashboard.presentation.R.drawable
+import my.schoolproject.dashboard.presentation.component.ModuleListItem
+import my.schoolproject.dashboard.presentation.model.LessonModule
+
+@Composable
+fun DashboardRoot(
+    modifier: Modifier = Modifier,
+    onDetailsClick: (Int) -> Unit,
+    onLogout: () -> Unit,
+    viewModel: DashboardViewModel = hiltViewModel()
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    DashboardScreen(
+        modifier = modifier,
+        state = state,
+        onAction = { action ->
+            when (action) {
+                is DashboardAction.OnDetailsClick -> onDetailsClick(action.id)
+                DashboardAction.OnLogoutClick -> onLogout()
+            }
+            viewModel.onAction(action)
+        })
+}
 
 @Composable
 fun DashboardScreen(
     modifier: Modifier = Modifier,
-    onLogout: () -> Unit,
-    onFirebaseLogout: () -> Unit,
+    state: DashboardState,
+    onAction: (DashboardAction) -> Unit
 ) {
     val list = (1..100).toList()
     LazyColumn(
@@ -38,15 +59,13 @@ fun DashboardScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(list) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Button(onClick = {}) {
-                    Text(text = "Module $it")
+            ModuleListItem(
+                lessonModule = it.toLessonModule(),
+                isSelected = state.selectedLessonId == it,
+                onClick = {
+                    onAction(DashboardAction.OnDetailsClick(it))
                 }
-            }
+            )
         }
     }
     Box(
@@ -56,8 +75,7 @@ fun DashboardScreen(
         contentAlignment = Alignment.BottomEnd
     ) {
         FloatingActionButton(onClick = {
-            onFirebaseLogout()
-            onLogout()
+            onAction(DashboardAction.OnLogoutClick)
         }) {
             Icon(
                 painter = painterResource(id = drawable.feature_dashboard_presentation_logout),
@@ -67,14 +85,16 @@ fun DashboardScreen(
     }
 }
 
+private fun Int.toLessonModule() =
+    LessonModule(id = this, name = "Module $this", description = "Description $this")
+
 
 @PreviewLightDark
 @Composable
 fun DashBoardScreenPreview() {
     MyApplicationTheme {
         DashboardScreen(
-            onLogout = {},
-            onFirebaseLogout = {}
-        )
+            state = DashboardState(),
+            onAction = {})
     }
 }

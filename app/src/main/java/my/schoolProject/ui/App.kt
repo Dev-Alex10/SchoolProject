@@ -47,7 +47,17 @@ fun App() {
             },
             bottomBar = {
                 if (isDashBoardRoute) {
-                    BottomNavigationBar(navigate = { navController.navigate(it) })
+                    BottomNavigationBar(
+                        currentRoute = currentRoute,
+                        navigate = {
+                            navController.navigate(it) {
+                                popUpTo(DashboardGraphRoutes.Home::class) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        })
                 }
             }
         ) { paddingValues ->

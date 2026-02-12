@@ -1,12 +1,10 @@
 package my.schoolproject.dashboard.presentation.navigation
 
 import androidx.compose.ui.Modifier
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import my.schoolproject.dashboard.presentation.DashboardScreen
-import my.schoolproject.dashboard.presentation.DashboardViewModel
+import my.schoolproject.dashboard.presentation.DashboardRoot
 import my.schoolproject.dashboard.presentation.SettingsScreen
 
 fun NavGraphBuilder.dashboardGraph(
@@ -18,11 +16,10 @@ fun NavGraphBuilder.dashboardGraph(
         startDestination = DashboardGraphRoutes.Home,
     ) {
         composable<DashboardGraphRoutes.Home> {
-            val viewModel = hiltViewModel<DashboardViewModel>()
-            DashboardScreen(
+            DashboardRoot(
                 modifier = modifier,
+                onDetailsClick = {},
                 onLogout = onLogout,
-                onFirebaseLogout = viewModel::logout
             )
         }
         composable<DashboardGraphRoutes.Settings> {
