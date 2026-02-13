@@ -35,6 +35,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 
             dependencies {
                 "implementation"(project(":core:domain"))
+                "implementation"(libs.findLibrary("kotlin-serialization-json").get())
 
                 "testImplementation"(libs.findLibrary("kotlin.test").get())
                 "testImplementation"(libs.findLibrary("junit").get())

@@ -7,4 +7,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.dashboard.domain)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network)
 }

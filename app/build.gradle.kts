@@ -30,6 +30,7 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.feature.auth.presentation)
     implementation(projects.feature.dashboard.presentation)
+    implementation(projects.feature.dashboard.data)
 
     implementation(libs.navigation.compose)
     implementation(platform(libs.firebase.bom))

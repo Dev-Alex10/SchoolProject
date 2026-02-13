@@ -22,8 +22,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import my.schoolproject.core.designsystem.ui.theme.MyApplicationTheme
 import my.schoolproject.dashboard.presentation.R.drawable
-import my.schoolproject.dashboard.presentation.component.ModuleListItem
-import my.schoolproject.dashboard.presentation.model.LessonModule
+import my.schoolproject.dashboard.presentation.component.LessonListItem
 
 @Composable
 fun DashboardRoot(
@@ -51,19 +50,18 @@ fun DashboardScreen(
     state: DashboardState,
     onAction: (DashboardAction) -> Unit
 ) {
-    val list = (1..100).toList()
     LazyColumn(
         modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(list) {
-            ModuleListItem(
-                lessonModule = it.toLessonModule(),
-                isSelected = state.selectedLessonId == it,
+        items(state.lessonModules) { lesson ->
+            LessonListItem(
+                lesson = lesson,
+                isSelected = state.selectedLessonId == lesson.id,
                 onClick = {
-                    onAction(DashboardAction.OnDetailsClick(it))
+                    onAction(DashboardAction.OnDetailsClick(lesson.id))
                 }
             )
         }
@@ -84,9 +82,6 @@ fun DashboardScreen(
         }
     }
 }
-
-private fun Int.toLessonModule() =
-    LessonModule(id = this, name = "Module $this", description = "Description $this")
 
 
 @PreviewLightDark
