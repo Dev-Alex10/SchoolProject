@@ -1,8 +1,9 @@
 package my.schoolproject.dashboard.presentation.navigation
 
 import kotlinx.serialization.Serializable
+import my.schoolproject.core.presentation.navigation.Route
 
-sealed interface DashboardGraphRoutes {
+sealed interface DashboardGraphRoutes : Route {
     @Serializable
     data object Graph : DashboardGraphRoutes
 
@@ -10,6 +11,5 @@ sealed interface DashboardGraphRoutes {
     data object Home : DashboardGraphRoutes
 
     @Serializable
-    data object Settings : DashboardGraphRoutes
-
+    data object Details : DashboardGraphRoutes
 }

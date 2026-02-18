@@ -28,9 +28,12 @@ android {
 dependencies {
     implementation(projects.core.data)
     implementation(projects.core.designsystem)
+    implementation(projects.core.presentation)
     implementation(projects.feature.auth.presentation)
     implementation(projects.feature.dashboard.presentation)
     implementation(projects.feature.dashboard.data)
+    implementation(projects.feature.profile.presentation)
+    implementation(projects.feature.settings.presentation)
 
     implementation(libs.navigation.compose)
     implementation(platform(libs.firebase.bom))

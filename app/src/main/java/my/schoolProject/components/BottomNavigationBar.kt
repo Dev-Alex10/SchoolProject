@@ -6,19 +6,27 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import my.schoolproject.dashboard.presentation.R.drawable
+import my.schoolProject.R.drawable
+import my.schoolProject.settings.presentation.navigation.SettingsGraphRoutes
+import my.schoolproject.core.presentation.navigation.Route
 import my.schoolproject.dashboard.presentation.navigation.DashboardGraphRoutes
+import my.schoolproject.profile.presentation.navigation.ProfileGraphRoutes
 
 @Composable
 fun BottomNavigationBar(
-    navigate: (DashboardGraphRoutes) -> Unit,
+    navigate: (Route) -> Unit,
     currentRoute: String
 ) {
     NavigationBar {
-        val items = listOf(DashboardGraphRoutes.Home, DashboardGraphRoutes.Settings)
+        val items = listOf(
+            DashboardGraphRoutes.Home,
+            ProfileGraphRoutes.Profile,
+            SettingsGraphRoutes.Settings
+        )
         val icons = listOf(
-            drawable.feature_dashboard_presentation_home,
-            drawable.feature_dashboard_presentation_settings
+            drawable.presentation_home,
+            drawable.feature_profile_presentation_profile_icon,
+            drawable.presentation_settings
         )
 
         items.forEachIndexed { index, item ->

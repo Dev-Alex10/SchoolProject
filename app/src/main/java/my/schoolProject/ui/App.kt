@@ -18,7 +18,9 @@ import my.schoolProject.components.BottomNavigationBar
 import my.schoolProject.navigation.NavigationRoot
 import my.schoolproject.auth.presentation.navigation.AuthGraphRoutes
 import my.schoolproject.core.designsystem.ui.theme.MyApplicationTheme
+import my.schoolproject.core.designsystem.ui.topbar.TopBarNavigationIcon
 import my.schoolproject.dashboard.presentation.navigation.DashboardGraphRoutes
+import my.schoolproject.profile.presentation.navigation.ProfileGraphRoutes
 
 @Composable
 fun App() {
@@ -34,19 +36,24 @@ fun App() {
     /**
      * The Scaffold needs to be on root because when changing from home to settings, if we had each with a scaffold, the state would be different
      * */
-    val isDashBoardRoute = currentRoute.contains(DashboardGraphRoutes::class.java.simpleName)
+    val isAuthRoute = currentRoute.contains(AuthGraphRoutes::class.java.simpleName)
 
     MyApplicationTheme {
         Scaffold(
             topBar = {
-                if (isDashBoardRoute) {
+                if (!isAuthRoute) {
                     CenterAlignedTopAppBar(
-                        title = { Text(currentRoute.split(".").last()) }
+                        title = { Text(currentRoute.split(".").last()) },
+                        navigationIcon = {
+                            if (currentRoute.contains(ProfileGraphRoutes.ProfileEdit::class.java.simpleName)) {
+                                TopBarNavigationIcon(onBackClick = { navController.popBackStack() })
+                            }
+                        }
                     )
                 }
             },
             bottomBar = {
-                if (isDashBoardRoute) {
+                if (!isAuthRoute) {
                     BottomNavigationBar(
                         currentRoute = currentRoute,
                         navigate = {
@@ -62,7 +69,7 @@ fun App() {
             }
         ) { paddingValues ->
             NavigationRoot(
-                navController,
+                navController = navController,
                 startDestination = startDestination,
                 modifier = Modifier.padding(paddingValues)
             )
