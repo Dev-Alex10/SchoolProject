@@ -22,6 +22,7 @@ The final goal is to have an app with:
 * Retrofit for HTTP calls
 * Coil for image loading
 * MVI design pattern (if you see anything antipattern, do reach me as I'm still learning the best practices)
+  
 [//]: # (* Datastore for isOffline mode)
 
 ## How to run the project
