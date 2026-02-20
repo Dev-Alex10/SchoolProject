@@ -12,9 +12,10 @@ interface FirebaseAccountService {
     suspend fun forgotPassword(email: String): EmptyResult<DataError.Remote>
     suspend fun register(email: String, password: String): Result<User, DataError.Remote>
 
+    suspend fun updateEmail(email: String): EmptyResult<DataError.Remote>
+
     suspend fun updateProfile(
         name: String? = null,
-        email: String? = null,
         photoUrl: String? = null
     ): EmptyResult<DataError.Remote>
 

@@ -3,15 +3,14 @@ package my.schoolproject.auth.presentation
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import my.schoolproject.auth.presentation.validation.EmailValidator
 import my.schoolproject.auth.presentation.validation.PasswordValidator
+import my.schoolproject.core.presentation.validator.EmailValidator
 
 abstract class AuthViewModel<T : AuthTextFieldsState>(initialState: T) : ViewModel() {
     private var hasLoadedInitialData = false
@@ -29,12 +28,12 @@ abstract class AuthViewModel<T : AuthTextFieldsState>(initialState: T) : ViewMod
             initialValue = initialState
         )
 
-    protected val isEmailValidFlow: Flow<Boolean> =
-        snapshotFlow { state.value.emailTextState.text.toString() }
+    protected val isEmailValidFlow =
+        snapshotFlow { state.value.emailTextState.text.trim().toString() }
             .map { email -> EmailValidator.validate(email) }
             .distinctUntilChanged()
 
-    protected val isPasswordValidFlow: Flow<Boolean> =
+    protected val isPasswordValidFlow =
         snapshotFlow { state.value.passwordTextState.text.toString() }
             .map { password -> PasswordValidator.validate(password) }
             .distinctUntilChanged()

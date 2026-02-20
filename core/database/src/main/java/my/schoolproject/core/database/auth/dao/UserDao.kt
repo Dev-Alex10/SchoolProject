@@ -11,7 +11,7 @@ import my.schoolproject.core.database.auth.entity.UserEntity
 interface UserDao {
     @Transaction
     @Query("SELECT * FROM User ORDER BY name ASC")
-    fun getAlphabetizedUsers(): Flow<List<UserEntity>>
+    fun getCurrentUser(): Flow<UserEntity?>
 
     @Query("SELECT * FROM User WHERE email = :email")
     suspend fun getUserByEmail(email: String): UserEntity?

@@ -1,8 +1,9 @@
 package my.schoolproject.auth.presentation.navigation
 
 import kotlinx.serialization.Serializable
+import my.schoolproject.core.presentation.navigation.Route
 
-sealed interface AuthGraphRoutes {
+sealed interface AuthGraphRoutes: Route {
     @Serializable
     data object Graph : AuthGraphRoutes
 

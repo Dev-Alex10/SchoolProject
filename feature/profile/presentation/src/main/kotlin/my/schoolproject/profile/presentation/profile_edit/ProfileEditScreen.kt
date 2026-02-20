@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -26,11 +29,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import my.schoolproject.core.designsystem.ui.theme.MyApplicationTheme
+import my.schoolproject.core.presentation.util.LocalSnackbarHostState
+import my.schoolproject.core.presentation.util.ObserveAsEvents
 import my.schoolproject.profile.presentation.R
 import my.schoolproject.profile.presentation.component.ProfileAvatarButton
 
@@ -42,18 +48,22 @@ fun ProfileEditRoot(
     viewModel: ProfileEditViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarState = LocalSnackbarHostState.current
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            is ProfileEditEvent.OnError -> snackbarState.showSnackbar(event.error)
+            ProfileEditEvent.OnSuccess -> onSaveSuccess()
+        }
+    }
 
     ProfileEditScreen(
-        modifier = modifier,
+        modifier = modifier.imePadding(),
         state = state,
         onAction = { action ->
             when (action) {
                 ProfileEditAction.OnCancelClick -> onCancel()
-                ProfileEditAction.OnSaveClick -> {
-                    viewModel.onAction(action)
-                    // TODO: Navigate back on success (use event/effect)
-                }
-
+                ProfileEditAction.OnPhotoClick -> {} // TODO handle photo click (picker)
                 else -> viewModel.onAction(action)
             }
         }
@@ -104,25 +114,22 @@ fun ProfileEditScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedTextField(
-            value = state.name,
-            onValueChange = { onAction(ProfileEditAction.OnNameChange(it)) },
-            label = { Text("Full Name") },
+            state = state.nameTextFieldState,
+            label = { Text("Display Name") },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            isError = state.nameError != null,
-            supportingText = state.nameError?.let { { Text(it) } }
+            lineLimits = TextFieldLineLimits.SingleLine,
+            isError = state.nameTextFieldState.text.isEmpty(),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = state.email,
-            onValueChange = { onAction(ProfileEditAction.OnEmailChange(it)) },
-            label = { Text("Email Address") },
+            state = state.emailTextFieldState,
+            lineLimits = TextFieldLineLimits.SingleLine,
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            isError = state.emailError != null,
-            supportingText = state.emailError?.let { { Text(it) } }
+            label = { Text("Email Address") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            isError = !state.isEmailValid && state.emailTextFieldState.text.isNotEmpty(),
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -130,7 +137,7 @@ fun ProfileEditScreen(
         Button(
             onClick = { onAction(ProfileEditAction.OnSaveClick) },
             modifier = Modifier.fillMaxWidth(),
-            enabled = !state.isSaving
+            enabled = !state.isSaving && state.canSave
         ) {
             if (state.isSaving) {
                 CircularProgressIndicator(
@@ -160,8 +167,8 @@ fun ProfileEditScreenPreview() {
     MyApplicationTheme {
         ProfileEditScreen(
             state = ProfileEditState(
-                name = "John Doe",
-                email = "john.doe@example.com"
+                initialName = "John Doe",
+                initialEmail = "john.doe@example.com"
             ),
             onAction = {}
         )

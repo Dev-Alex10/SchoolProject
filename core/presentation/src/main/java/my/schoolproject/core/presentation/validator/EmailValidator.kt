@@ -1,4 +1,4 @@
-package my.schoolproject.auth.presentation.validation
+package my.schoolproject.core.presentation.validator
 
 import android.util.Patterns
 

@@ -8,10 +8,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import my.schoolproject.auth.presentation.AuthViewModel
-import my.schoolproject.core.domain.auth.AuthRepository
 import my.schoolproject.core.domain.DataError
+import my.schoolproject.core.domain.auth.AuthRepository
 import my.schoolproject.core.domain.onFailure
 import my.schoolproject.core.domain.onSuccess
 import javax.inject.Inject
@@ -41,12 +42,14 @@ class RegisterViewModel @Inject constructor(
         ) { isEmailValid, isPasswordValid, isConfirmPasswordValid ->
             val allValid = isEmailValid && isPasswordValid && isConfirmPasswordValid
 
-            _state.value = _state.value.copy(
-                canRegister = allValid,
-                isEmailValid = isEmailValid,
-                isPasswordValid = isPasswordValid,
-                isConfirmPasswordValid = isConfirmPasswordValid
-            )
+            _state.update {
+                it.copy(
+                    canRegister = allValid,
+                    isEmailValid = isEmailValid,
+                    isPasswordValid = isPasswordValid,
+                    isConfirmPasswordValid = isConfirmPasswordValid
+                )
+            }
         }.launchIn(viewModelScope)
     }
 

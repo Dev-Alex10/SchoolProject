@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import my.schoolProject.settings.presentation.navigation.settingsGraph
 import my.schoolproject.auth.presentation.navigation.AuthGraphRoutes
 import my.schoolproject.auth.presentation.navigation.authGraph
+import my.schoolproject.core.presentation.navigation.Route
 import my.schoolproject.dashboard.presentation.navigation.DashboardGraphRoutes
 import my.schoolproject.dashboard.presentation.navigation.dashboardGraph
 import my.schoolproject.profile.presentation.navigation.profileGraph
@@ -14,7 +15,7 @@ import my.schoolproject.profile.presentation.navigation.profileGraph
 @Composable
 fun NavigationRoot(
     navController: NavHostController,
-    startDestination: Any,
+    startDestination: Route,
     modifier: Modifier
 ) {
     NavHost(
@@ -43,7 +44,7 @@ fun NavigationRoot(
                 })
             profileGraph(
                 modifier = modifier,
-                navController = navController
+                navController = navController,
             )
             settingsGraph(
                 modifier = modifier,

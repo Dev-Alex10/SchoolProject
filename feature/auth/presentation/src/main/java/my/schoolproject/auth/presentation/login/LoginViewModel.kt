@@ -6,10 +6,11 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import my.schoolproject.core.domain.auth.AuthRepository
 import my.schoolproject.auth.presentation.AuthViewModel
 import my.schoolproject.core.domain.DataError
+import my.schoolproject.core.domain.auth.AuthRepository
 import my.schoolproject.core.domain.onFailure
 import my.schoolproject.core.domain.onSuccess
 import javax.inject.Inject
@@ -28,24 +29,20 @@ class LoginViewModel @Inject constructor(
         ) { isEmailValid, isPasswordValid ->
             val allValid = isEmailValid && isPasswordValid
 
-            _state.value = _state.value.copy(
-                canLogin = allValid,
-                isEmailValid = isEmailValid,
-                isPasswordValid = isPasswordValid,
-            )
+            _state.update {
+                it.copy(
+                    canLogin = allValid,
+                    isEmailValid = isEmailValid,
+                    isPasswordValid = isPasswordValid,
+                )
+            }
         }.launchIn(viewModelScope)
-    }
-
-    fun logout() {
-        viewModelScope.launch {
-            repository.logout()
-        }
     }
 
     fun login() {
         viewModelScope.launch {
             repository.login(
-                state.value.emailTextState.text.toString(),
+                state.value.emailTextState.text.trim().toString(),
                 state.value.passwordTextState.text.toString()
             ).onSuccess {
                 eventChannel.send(LoginEvent.OnSuccess)

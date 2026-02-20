@@ -63,9 +63,18 @@ internal class FirebaseAccountServiceImpl @Inject constructor() : FirebaseAccoun
         }
     }
 
+    override suspend fun updateEmail(email: String): EmptyResult<DataError.Remote> {
+        val task = auth.currentUser?.verifyBeforeUpdateEmail(email) ?: return Result.Failure(
+            DataError.Remote.NOT_FOUND
+        ).asEmptyResult()
+        return runAuthTaskSafely {
+            task.await()
+            Result.Success(Unit).asEmptyResult()
+        }
+    }
+
     override suspend fun updateProfile(
         name: String?,
-        email: String?,
         photoUrl: String?
     ): EmptyResult<DataError.Remote> {
         val profileUpdates = userProfileChangeRequest {

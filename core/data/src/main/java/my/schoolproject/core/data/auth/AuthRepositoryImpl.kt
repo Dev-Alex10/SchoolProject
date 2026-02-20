@@ -15,15 +15,27 @@ internal class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
     override suspend fun login(email: String, password: String): EmptyResult<DataError> {
         val result = firebaseAccountService.login(email, password)
-        return result.onSuccess {
-            userRepository.upsert(it)
+
+        return result.onSuccess { userResult ->
+            if (userResult.name.isNotEmpty()) {
+                userRepository.updateUser(user = userResult)
+            } else {
+                val user = userResult.copy(
+                    name = email.split("@").first()
+                        .replaceFirstChar { it.uppercaseChar() })
+                userRepository.updateUser(user = user)
+            }
         }.asEmptyResult()
     }
 
     override suspend fun register(email: String, password: String): EmptyResult<DataError> {
         val result = firebaseAccountService.register(email, password)
-        return result.onSuccess {
-            userRepository.upsert(it)
+
+        return result.onSuccess { userResult ->
+            val user = userResult.copy(
+                name = email.split("@").first()
+                    .replaceFirstChar { it.uppercaseChar() })
+            userRepository.updateUser(user = user)
         }.asEmptyResult()
     }
 

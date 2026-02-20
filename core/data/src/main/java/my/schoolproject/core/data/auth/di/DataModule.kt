@@ -8,7 +8,7 @@ import my.schoolproject.core.domain.auth.AuthRepository
 import my.schoolproject.core.domain.auth.FirebaseAccountService
 import my.schoolproject.core.data.auth.AuthRepositoryImpl
 import my.schoolproject.core.data.auth.FirebaseAccountServiceImpl
-import my.schoolproject.core.data.auth.user.OfflineUserRepository
+import my.schoolproject.core.data.auth.user.OfflineFirstUserRepository
 import my.schoolproject.core.domain.auth.user.UserRepository
 
 @Module
@@ -18,7 +18,7 @@ internal abstract class DataModule {
     internal abstract fun bindsAccountService(firebaseService: FirebaseAccountServiceImpl): FirebaseAccountService
 
     @Binds
-    internal abstract fun bindsUserRepository(userRepository: OfflineUserRepository): UserRepository
+    internal abstract fun bindsUserRepository(userRepository: OfflineFirstUserRepository): UserRepository
 
     @Binds
     internal abstract fun bindsAuthRepository(authRepository: AuthRepositoryImpl): AuthRepository

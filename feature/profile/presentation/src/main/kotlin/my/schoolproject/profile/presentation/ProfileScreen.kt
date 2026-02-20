@@ -94,7 +94,7 @@ fun ProfileScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 ProfileInfoItem(
-                    label = "Full Name",
+                    label = "Display Name",
                     value = state.name
                 )
                 ProfileInfoItem(

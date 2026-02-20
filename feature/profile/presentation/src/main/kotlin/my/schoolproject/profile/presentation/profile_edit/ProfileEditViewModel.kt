@@ -1,81 +1,145 @@
 package my.schoolproject.profile.presentation.profile_edit
 
+import android.util.Log
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import my.schoolproject.core.domain.auth.user.UserRepository
+import my.schoolproject.core.presentation.validator.EmailValidator
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
-    // Inject repositories here
+    private val repository: UserRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(ProfileEditState())
-    val state = _state.asStateFlow()
+    private var hasLoadedInitialData = false
+    private val eventChannel = Channel<ProfileEditEvent>()
+    val events = eventChannel.receiveAsFlow()
 
-    init {
-        loadProfile()
+    private var currentUserId: String? = null
+
+    private val _state = MutableStateFlow(ProfileEditState())
+    val state = _state
+        .onStart {
+            if (!hasLoadedInitialData) {
+                loadProfile()
+                observeValidationStates()
+                hasLoadedInitialData = true
+            }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = _state.value,
+        )
+
+    private val isEmailValidFlow =
+        snapshotFlow { state.value.emailTextFieldState.text.trim().toString() }
+            .onEach { Log.d(this::class.java.simpleName, "Email changed: $it") }
+            .map { email -> EmailValidator.validate(email) }
+            .distinctUntilChanged()
+
+    private val isNameValidFlow =
+        snapshotFlow { state.value.nameTextFieldState.text.trim().toString() }
+            .onEach { Log.d(this::class.java.simpleName, "Name changed: $it") }
+            .map { name -> name.isNotEmpty() }
+            .distinctUntilChanged()
+
+    private suspend fun loadProfile() {
+        try {
+            val user = repository.getCurrentUser().first()
+
+            currentUserId = user.uid
+            _state.update {
+                it.emailTextFieldState.edit { replace(0, length, user.email) }
+                it.nameTextFieldState.edit { replace(0, length, user.name) }
+                it.copy(
+                    initialName = user.name,
+                    initialEmail = user.email,
+                    photoUrl = user.photoUrl
+                )
+            }
+
+        } catch (e: Exception) {
+            eventChannel.send(
+                ProfileEditEvent.OnError(e.message ?: "Failed to load profile")
+            )
+        }
+    }
+
+    private fun observeValidationStates() {
+        combine(
+            isEmailValidFlow,
+            isNameValidFlow
+        ) { isEmailValid, isNameValid ->
+            _state.value = _state.value.copy(
+                isEmailValid = isEmailValid,
+                isNameValid = isNameValid,
+                canSave = isEmailValid && isNameValid
+            )
+        }.launchIn(viewModelScope)
     }
 
     fun onAction(action: ProfileEditAction) {
         when (action) {
-            is ProfileEditAction.OnNameChange -> {
-                _state.value = _state.value.copy(
-                    name = action.name,
-                    nameError = null
-                )
-            }
-
-            is ProfileEditAction.OnEmailChange -> {
-                _state.value = _state.value.copy(
-                    email = action.email,
-                    emailError = null
-                )
-            }
-
-            ProfileEditAction.OnPhotoClick -> {
-                // TODO: Handle photo selection
-            }
-
             ProfileEditAction.OnSaveClick -> {
                 saveProfile()
             }
 
-            ProfileEditAction.OnCancelClick -> {
-                // TODO: Handle cancel
+            else -> {/*Do nothing*/
             }
         }
     }
 
-    private fun loadProfile() {
-        // TODO: Load current user profile
-        _state.value = ProfileEditState(
-            name = "John Doe",
-            email = "john.doe@example.com",
-            photoUrl = null
-        )
-    }
 
     private fun saveProfile() {
-        // TODO: Validate and save profile
-        val currentState = _state.value
+        val currentState = state.value
 
-        // Basic validation
-        if (currentState.name.isBlank()) {
-            _state.value = currentState.copy(nameError = "Name cannot be empty")
+        val isNameTheSame = currentState.initialName == currentState.nameTextFieldState.text.trim()
+        val isEmailTheSame =
+            currentState.initialEmail == currentState.emailTextFieldState.text.trim()
+        if (isNameTheSame && isEmailTheSame) {
+            Log.w(this::class.java.simpleName, "Name and email cannot be the same as before")
+            viewModelScope.launch {
+                eventChannel.send(ProfileEditEvent.OnError("Name and email cannot be the same as before"))
+            }
             return
         }
 
-        if (currentState.email.isBlank()) {
-            _state.value = currentState.copy(emailError = "Email cannot be empty")
+        val userId = currentUserId
+        if (userId == null) {
+            viewModelScope.launch {
+                eventChannel.send(ProfileEditEvent.OnError("User not loaded"))
+            }
             return
         }
 
-        // TODO: Save to repository
-        _state.value = currentState.copy(isSaving = true)
-
-        // Simulate save
-        // After save, navigate back
+        viewModelScope.launch {
+            _state.update { it.copy(isSaving = true) }
+            try {
+                repository.updateUser(currentState.toDomain(userId))
+                eventChannel.send(ProfileEditEvent.OnSuccess)
+            } catch (e: Exception) {
+                Log.e(this::class.java.simpleName, "Error saving profile", e)
+                eventChannel.send(ProfileEditEvent.OnError("Error saving profile: ${e.message}"))
+            } finally {
+                _state.update { it.copy(isSaving = false) }
+            }
+        }
     }
 }

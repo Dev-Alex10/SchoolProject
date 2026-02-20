@@ -1,37 +1,29 @@
 package my.schoolproject.profile.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import my.schoolproject.core.domain.auth.user.UserRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    // Inject repositories here
+    repository: UserRepository
 ) : ViewModel() {
-
-    private val _state = MutableStateFlow(ProfileState())
-    val state = _state.asStateFlow()
-
-    init {
-        loadProfile()
-    }
-
-    fun onAction(action: ProfileAction) {
-        when (action) {
-            ProfileAction.OnEditClick -> {
-                // TODO: Handle edit click
-            }
-        }
-    }
-
-    private fun loadProfile() {
-        // TODO: Load user profile data
-        _state.value = ProfileState(
-            name = "John Doe",
-            email = "john.doe@example.com",
-            photoUrl = null // Add URL when available
+    val state = repository.getCurrentUser()
+        .map { user ->
+            ProfileState(
+                name = user.name,
+                email = user.email,
+                photoUrl = user.photoUrl,
+                isLoading = false
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            initialValue = ProfileState(isLoading = true),
+            started = SharingStarted.WhileSubscribed(5000)
         )
-    }
 }
