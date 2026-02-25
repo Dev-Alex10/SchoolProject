@@ -1,5 +1,6 @@
-# SchoolProject
-I use 
+# SchoolProject 
+(Outdated please check branch [redo-app](https://github.com/Dev-Alex10/SchoolProject/tree/redo-app))
+
 ## Jetpack Compose
 ## Retrofit
 Access the API
