@@ -1,5 +1,8 @@
 package my.schoolproject.profile.presentation.profile_edit
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -49,6 +52,11 @@ fun ProfileEditRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarState = LocalSnackbarHostState.current
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        uri?.let { viewModel.onAction(ProfileEditAction.OnPhotoSelected(it)) }
+    }
 
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
@@ -63,7 +71,11 @@ fun ProfileEditRoot(
         onAction = { action ->
             when (action) {
                 ProfileEditAction.OnCancelClick -> onCancel()
-                ProfileEditAction.OnPhotoClick -> {} // TODO handle photo click (picker)
+                ProfileEditAction.OnPhotoClick -> photoPickerLauncher.launch(
+                    PickVisualMediaRequest(
+                        mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
                 else -> viewModel.onAction(action)
             }
         }
@@ -108,6 +120,24 @@ fun ProfileEditScreen(
                     modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
+            }
+            if (state.photoUrl != null) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .size(28.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary)
+                        .clickable { onAction(ProfileEditAction.OnRemovePhotoClick) },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.feature_profile_presentation_close),
+                        contentDescription = "Remove photo",
+                        modifier = Modifier.size(16.dp),
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
         }
 
@@ -166,10 +196,7 @@ fun ProfileEditScreen(
 fun ProfileEditScreenPreview() {
     MyApplicationTheme {
         ProfileEditScreen(
-            state = ProfileEditState(
-                initialName = "John Doe",
-                initialEmail = "john.doe@example.com"
-            ),
+            state = ProfileEditState(),
             onAction = {}
         )
     }

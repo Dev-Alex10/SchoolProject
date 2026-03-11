@@ -33,6 +33,9 @@ class ProfileEditViewModel @Inject constructor(
     val events = eventChannel.receiveAsFlow()
 
     private var currentUserId: String? = null
+    private var initialName = ""
+    private var initialEmail = ""
+    private var initialPhotoUrl: String? = null
 
     private val _state = MutableStateFlow(ProfileEditState())
     val state = _state
@@ -60,17 +63,29 @@ class ProfileEditViewModel @Inject constructor(
             .map { name -> name.isNotEmpty() }
             .distinctUntilChanged()
 
+    private val hasChangesFlow = combine(
+        snapshotFlow {
+            val currentState = state.value
+            currentState.nameTextFieldState.text.trim().toString() != initialName ||
+                    currentState.emailTextFieldState.text.trim().toString() != initialEmail
+        },
+        _state.map { it.photoUrl }.distinctUntilChanged()
+    ) { textChanges, photoChanges ->
+        textChanges || photoChanges != initialPhotoUrl
+    }.distinctUntilChanged()
+
     private suspend fun loadProfile() {
         try {
             val user = repository.getCurrentUser().first()
 
             currentUserId = user.uid
+            initialName = user.name
+            initialEmail = user.email
+            initialPhotoUrl = user.photoUrl
             _state.update {
                 it.emailTextFieldState.edit { replace(0, length, user.email) }
                 it.nameTextFieldState.edit { replace(0, length, user.name) }
                 it.copy(
-                    initialName = user.name,
-                    initialEmail = user.email,
                     photoUrl = user.photoUrl
                 )
             }
@@ -85,13 +100,16 @@ class ProfileEditViewModel @Inject constructor(
     private fun observeValidationStates() {
         combine(
             isEmailValidFlow,
-            isNameValidFlow
-        ) { isEmailValid, isNameValid ->
-            _state.value = _state.value.copy(
-                isEmailValid = isEmailValid,
-                isNameValid = isNameValid,
-                canSave = isEmailValid && isNameValid
-            )
+            isNameValidFlow,
+            hasChangesFlow
+        ) { isEmailValid, isNameValid, hasChanges ->
+            _state.update {
+                it.copy(
+                    isEmailValid = isEmailValid,
+                    isNameValid = isNameValid,
+                    canSave = isEmailValid && isNameValid && hasChanges
+                )
+            }
         }.launchIn(viewModelScope)
     }
 
@@ -101,6 +119,14 @@ class ProfileEditViewModel @Inject constructor(
                 saveProfile()
             }
 
+            is ProfileEditAction.OnPhotoSelected -> {
+                _state.update { it.copy(photoUrl = action.uri.toString()) }
+            }
+
+            ProfileEditAction.OnRemovePhotoClick -> {
+                _state.update { it.copy(photoUrl = null) }
+            }
+
             else -> {/*Do nothing*/
             }
         }
@@ -108,19 +134,6 @@ class ProfileEditViewModel @Inject constructor(
 
 
     private fun saveProfile() {
-        val currentState = state.value
-
-        val isNameTheSame = currentState.initialName == currentState.nameTextFieldState.text.trim()
-        val isEmailTheSame =
-            currentState.initialEmail == currentState.emailTextFieldState.text.trim()
-        if (isNameTheSame && isEmailTheSame) {
-            Log.w(this::class.java.simpleName, "Name and email cannot be the same as before")
-            viewModelScope.launch {
-                eventChannel.send(ProfileEditEvent.OnError("Name and email cannot be the same as before"))
-            }
-            return
-        }
-
         val userId = currentUserId
         if (userId == null) {
             viewModelScope.launch {
@@ -132,7 +145,7 @@ class ProfileEditViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update { it.copy(isSaving = true) }
             try {
-                repository.updateUser(currentState.toDomain(userId))
+                repository.updateUser(state.value.toDomain(userId))
                 eventChannel.send(ProfileEditEvent.OnSuccess)
             } catch (e: Exception) {
                 Log.e(this::class.java.simpleName, "Error saving profile", e)

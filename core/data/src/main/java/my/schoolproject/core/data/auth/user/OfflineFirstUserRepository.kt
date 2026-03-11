@@ -33,10 +33,10 @@ internal class OfflineFirstUserRepository @Inject constructor(
     override suspend fun getUserByEmail(email: String) = userDao.getUserByEmail(email)?.toDomain()
 
     override suspend fun updateUser(user: User) {
-        firebaseAccountService.updateEmail(user.email).onFailure {
-            Log.e(this::class.java.simpleName, "Update email ${it.name}")
-            throw Exception("Error updating email")
-        }.onSuccess {
+//        firebaseAccountService.updateEmail(user.email).onFailure {
+//            Log.e(this::class.java.simpleName, "Update email ${it.name}")
+//            throw Exception("Error updating email")
+//        }.onSuccess {
             firebaseAccountService.updateProfile(
                 name = user.name,
                 photoUrl = user.photoUrl
@@ -45,7 +45,7 @@ internal class OfflineFirstUserRepository @Inject constructor(
                 throw Exception("Error updating profile")
             }
             userDao.upsert(user.toDatabaseEntity())
-        }
+//        }
     }
 
     override suspend fun deleteAllUsers() = userDao.deleteAll()

@@ -4,10 +4,8 @@ import androidx.compose.foundation.text.input.TextFieldState
 import my.schoolproject.core.domain.auth.user.User
 
 data class ProfileEditState(
-    val initialName: String = "",
     val nameTextFieldState: TextFieldState = TextFieldState(),
     val isNameValid: Boolean = false,
-    val initialEmail: String = "",
     val emailTextFieldState: TextFieldState = TextFieldState(),
     val isEmailValid: Boolean = false,
     val canSave: Boolean = false,
